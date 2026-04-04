@@ -99,4 +99,61 @@
              class="w-full opacity-90">
     </div>
 </section>
+<section class="bg-orange-500 py-20 px-4">
+
+    <!-- Titre -->
+    <h2 class="text-center text-white text-3xl md:text-4xl font-bold mb-12">
+        Questions fréquentes
+    </h2>
+
+    <!-- FAQ Container -->
+    <div class="max-w-2xl mx-auto space-y-4">
+
+        <!-- Item -->
+        <details class="group bg-[#063537] text-white rounded-xl p-5 cursor-pointer">
+            <summary class="flex justify-between items-center font-medium list-none">
+                Qu'est ce que Biblio?
+                <span class="text-xl transition-transform group-open:rotate-45">+</span>
+            </summary>
+            <p class="mt-4 text-gray-300">
+                Biblio est une plateforme dédiée à la découverte et à l’apprentissage à travers des contenus interactifs.
+            </p>
+        </details>
+
+        <!-- Item -->
+        <details class="group bg-[#063537] text-white rounded-xl p-5 cursor-pointer">
+            <summary class="flex justify-between items-center font-medium list-none">
+                A qui s'adresse Biblio?
+                <span class="text-xl transition-transform group-open:rotate-45">+</span>
+            </summary>
+            <p class="mt-4 text-gray-300">
+                Biblio s’adresse à tous les passionnés de lecture et d’apprentissage, quel que soit leur niveau.
+            </p>
+        </details>
+
+        <!-- Item -->
+        <details class="group bg-[#063537] text-white rounded-xl p-5 cursor-pointer">
+            <summary class="flex justify-between items-center font-medium list-none">
+                Comment puis-je contribuer à Biblio?
+                <span class="text-xl transition-transform group-open:rotate-45">+</span>
+            </summary>
+            <p class="mt-4 text-gray-300">
+                Vous pouvez contribuer en partageant Bblio à vos proches, en proposant des idées ou en participant à la communauté.
+            </p>
+        </details>
+
+        <!-- Item -->
+        <details class="group bg-[#063537] text-white rounded-xl p-5 cursor-pointer">
+            <summary class="flex justify-between items-center font-medium list-none">
+                Quelles oeuvres gabonaises sont incluses dans Biblio?
+                <span class="text-xl transition-transform group-open:rotate-45">+</span>
+            </summary>
+            <p class="mt-4 text-gray-300">
+                Plusieurs oeuvres locales sont intégrées afin de valoriser la richesse culturelle du Gabon.
+            </p>
+        </details>
+
+    </div>
+
+</section>
 @endsection

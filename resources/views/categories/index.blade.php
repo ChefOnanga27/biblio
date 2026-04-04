@@ -10,7 +10,7 @@
             @forelse($categories as $categorie)
                 <a href="{{ route('categories.show', $categorie) }}" class="block p-4 bg-white rounded shadow hover:shadow-lg transition">
                     <h2 class="text-xl font-semibold">{{ $categorie->nom }}</h2>
-                    <p class="text-gray-500">{{ $categorie->livres_count }} livre(s)</p>
+                    <p class="text-black">{{ $categorie->livres_count }} livre(s)</p>
                 </a>
             @empty
                 <p class="text-gray-500">Aucune catégorie pour le moment.</p>
