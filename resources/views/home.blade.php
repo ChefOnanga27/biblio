@@ -112,40 +112,40 @@
         <!-- Item -->
         <details class="group bg-[#063537] text-white rounded-xl p-5 cursor-pointer">
             <summary class="flex justify-between items-center font-medium list-none">
-                Qu'est ce que Biblio?
+                Qu'est ce que BIBLIO?
                 <span class="text-xl transition-transform group-open:rotate-45">+</span>
             </summary>
             <p class="mt-4 text-gray-300">
-                Biblio est une plateforme dédiée à la découverte et à l’apprentissage à travers des contenus interactifs.
+                BIBLIO est une plateforme dédiée à la découverte et à l’apprentissage à travers des contenus interactifs.
             </p>
         </details>
 
         <!-- Item -->
         <details class="group bg-[#063537] text-white rounded-xl p-5 cursor-pointer">
             <summary class="flex justify-between items-center font-medium list-none">
-                A qui s'adresse Biblio?
+                A qui s'adresse BIBLIO?
                 <span class="text-xl transition-transform group-open:rotate-45">+</span>
             </summary>
             <p class="mt-4 text-gray-300">
-                Biblio s’adresse à tous les passionnés de lecture et d’apprentissage, quel que soit leur niveau.
+                BIBLIO s’adresse à tous les passionnés de lecture et d’apprentissage, quel que soit leur niveau.
             </p>
         </details>
 
         <!-- Item -->
         <details class="group bg-[#063537] text-white rounded-xl p-5 cursor-pointer">
             <summary class="flex justify-between items-center font-medium list-none">
-                Comment puis-je contribuer à Biblio?
+                Comment puis-je contribuer à BIBLIO?
                 <span class="text-xl transition-transform group-open:rotate-45">+</span>
             </summary>
             <p class="mt-4 text-gray-300">
-                Vous pouvez contribuer en partageant Bblio à vos proches, en proposant des idées ou en participant à la communauté.
+                Vous pouvez contribuer en partageant BIBLIO à vos proches, en proposant des idées ou en participant à la communauté.
             </p>
         </details>
 
         <!-- Item -->
         <details class="group bg-[#063537] text-white rounded-xl p-5 cursor-pointer">
             <summary class="flex justify-between items-center font-medium list-none">
-                Quelles oeuvres gabonaises sont incluses dans Biblio?
+                Quelles oeuvres gabonaises sont incluses dans BIBLIO?
                 <span class="text-xl transition-transform group-open:rotate-45">+</span>
             </summary>
             <p class="mt-4 text-gray-300">

@@ -59,6 +59,8 @@ Route::post('/contact', function (\Illuminate\Http\Request $request) {
         'message' => 'required|string',
     ]);
 
+
+Route::get('/', [LivreController::class, 'index'])->name('livre.home');
     // Ici on peut envoyer un email ou stocker en base.
     // Mail::to(config('mail.from.address'))->send(new ContactMessage($data));
 
