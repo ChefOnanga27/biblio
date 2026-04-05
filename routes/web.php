@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Livres\LivreController as HomeLivreController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -14,8 +15,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])
-    ->name('home');
+
+Route::get('/', [HomeLivreController::class, 'index'])->name('home');
 
 Route::get('/bibliotheque', [App\Http\Controllers\LivreController::class, 'index'])
     ->name('livre.index');
@@ -60,7 +61,7 @@ Route::post('/contact', function (\Illuminate\Http\Request $request) {
     ]);
 
 
-Route::get('/', [LivreController::class, 'index'])->name('livre.home');
+
     // Ici on peut envoyer un email ou stocker en base.
     // Mail::to(config('mail.from.address'))->send(new ContactMessage($data));
 

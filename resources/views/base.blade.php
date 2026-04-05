@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <title>@yield('title', 'MBULU')</title>
     <style>
         *, *::before, *::after { box-sizing: border-box; }
         body {
-            font-family: 'Poppins', serif;
+            font-family: 'Poppins', sans-serif;
             background: #FAFAF7;
             color: #1a1a18;
             margin: 0;
@@ -47,7 +47,7 @@
             justify-content: center;
         }
         .nav-logo-text {
-            font-family: 'Syne', sans-serif;
+            font-family: 'Poppins', sans-serif;
             font-size: 17px;
             font-weight: 800;
             color: #063537;
@@ -63,7 +63,7 @@
             padding: 0;
         }
         .nav-links a {
-            font-family: 'Syne', sans-serif;
+            font-family: 'Poppins', sans-serif;
             font-size: 15px;
             font-weight: 500;
             color: #4a4a45;
@@ -89,7 +89,7 @@
         }
 
         .btn-ghost {
-            font-family: 'Syne', sans-serif;
+            font-family: 'Poppins', sans-serif;
             font-size: 12.5px;
             font-weight: 600;
             color: #4a4a45;
@@ -111,7 +111,7 @@
         }
 
         .btn-primary {
-            font-family: 'Syne', sans-serif;
+            font-family: 'Poppins', sans-serif;
             font-size: 12.5px;
             font-weight: 600;
             color: white;
@@ -132,7 +132,7 @@
         }
 
         .btn-danger {
-            font-family: 'Syne', sans-serif;
+            font-family: 'Poppins', sans-serif;
             font-size: 12.5px;
             font-weight: 600;
             color: #4a4a45;
@@ -175,10 +175,10 @@
             line-height: 1.7;
             margin: 12px 0 0;
             max-width: 280px;
-            font-family: 'Poppins', serif;
+            font-family: 'Poppins', sans-serif;
         }
         .footer-col-title {
-            font-family: 'Syne', sans-serif;
+            font-family: 'Poppins', sans-serif;
             font-size: 10.5px;
             font-weight: 700;
             letter-spacing: 0.12em;
@@ -195,7 +195,7 @@
             gap: 10px;
         }
         .footer-links a {
-            font-family: 'Syne', sans-serif;
+            font-family: 'Poppins', sans-serif;
             font-size: 13px;
             color: rgba(255,255,255,0.55);
             text-decoration: none;
@@ -213,7 +213,7 @@
             justify-content: space-between;
         }
         .footer-bottom p {
-            font-family: 'Syne', sans-serif;
+            font-family: 'Poppins', sans-serif;
             font-size: 12px;
             color: rgba(255,255,255,0.25);
         }
@@ -308,7 +308,7 @@
         <!-- Actions -->
         <div class="nav-actions">
             @auth
-                <span style="font-family:'Syne',sans-serif; font-size:12.5px; color:#4a4a45;">
+                <span style="font-family:'Poppins',sans-serif; font-size:12.5px; color:#4a4a45;">
                     {{ auth()->user()->name }}
                 </span>
                 <form method="POST" action="{{ route('logout') }}" style="margin:0;">
@@ -358,13 +358,13 @@
                             <path d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"/>
                         </svg>
                     </div>
-                    <span style="font-family:'Syne',sans-serif; font-size:17px; font-weight:800; color:white;">BIBLIO</span>
+                    <span style="font-family:'Poppins',sans-serif; font-size:17px; font-weight:800; color:white;">BIBLIO</span>
                 </div>
                 <p>La bibliothèque numérique du patrimoine gabonais. Littérature, culture et savoir d'Afrique centrale, accessible à tous.</p>
 
                 <div style="display:flex; align-items:center; gap:6px; margin-top:20px;">
                     <span style="width:6px; height:6px; border-radius:50%; background:#f97316;"></span>
-                    <span style="font-family:'Syne',sans-serif; font-size:11px; color:rgba(255,255,255,0.3); letter-spacing:0.08em; text-transform:uppercase;">
+                    <span style="font-family:'Poppins',sans-serif; font-size:11px; color:rgba(255,255,255,0.3); letter-spacing:0.08em; text-transform:uppercase;">
                         Fondée à Libreville · Gabon
                     </span>
                 </div>

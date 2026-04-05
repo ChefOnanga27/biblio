@@ -18,7 +18,7 @@
             <span class="inline-block w-6 h-px bg-orange-400"></span>
             Blog MBULU
         </p>
-        <h1 class="font-serif text-4xl font-semibold text-white leading-tight mb-4">
+        <h1 class="font-sans text-4xl font-semibold text-white leading-tight mb-4">
             L'art du <em class="italic text-orange-400">livre</em><br>en Afrique centrale
         </h1>
         <p class="text-[15px] text-white/55 font-light max-w-lg leading-relaxed">
@@ -58,7 +58,7 @@
             <p class="text-[11px] font-medium tracking-wide uppercase text-orange-400 mb-3">
                 Article
             </p>
-            <h2 class="font-serif text-2xl font-semibold text-gray-900 leading-snug mb-3">
+            <h2 class="font-sans text-2xl font-semibold text-gray-900 leading-snug mb-3">
                 {{ $featured->titre }}
             </h2>
             <p class="flex items-center gap-1.5 text-[12px] text-gray-300 mb-3.5">
@@ -112,7 +112,7 @@
                 <div class="h-[3px] bg-[#063537]"></div>
 
                 <div class="flex flex-col flex-1 p-5">
-                    <h3 class="font-serif text-[15px] font-semibold text-gray-900
+                    <h3 class="font-sans text-[15px] font-semibold text-gray-900
                                leading-snug line-clamp-2 mb-2">
                         {{ $article->titre }}
                     </h3>

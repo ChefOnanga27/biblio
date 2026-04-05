@@ -47,7 +47,7 @@
         border-radius: 9px;
         outline: none;
         width: 220px;
-        font-family: 'DM Sans', sans-serif;
+        font-family: 'Poppins', sans-serif;
         color: #374151;
         transition: border-color 0.15s;
     }
@@ -78,7 +78,7 @@
     <a href="{{ route('admin.livres.create') }}"
        style="display:inline-flex; align-items:center; gap:7px; background:#0C1F1F; color:white;
               font-size:13px; font-weight:600; padding:9px 18px; border-radius:10px;
-              text-decoration:none; transition:background 0.15s; font-family:'DM Sans',sans-serif;"
+              text-decoration:none; transition:background 0.15s; font-family:'Poppins',sans-serif;"
        onmouseover="this.style.background='#f97316'"
        onmouseout="this.style.background='#0C1F1F'">
         <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">

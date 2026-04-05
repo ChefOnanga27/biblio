@@ -14,7 +14,7 @@
         border-radius: 9px;
         outline: none;
         width: 220px;
-        font-family: 'DM Sans', sans-serif;
+        font-family: 'Poppins', sans-serif;
         color: #374151;
         transition: border-color 0.15s;
         background: white;

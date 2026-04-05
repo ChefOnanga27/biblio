@@ -1,6 +1,6 @@
 @extends('base')
 
-@section('title', 'Contact - MBULU')
+@section('title', 'Contact - Biblio')
 
 @section('content')
 
@@ -18,7 +18,7 @@
                 Nous contacter
             </span>
         </div>
-        <h1 class="font-serif text-[2.6rem] font-semibold text-white leading-tight mb-3">
+        <h1 class="font-sans text-[2.6rem] font-semibold text-white leading-tight mb-3">
             Écrivez-<em class="italic text-orange-400">nous</em>
         </h1>
         <p class="text-[14.5px] text-white/50 font-light max-w-md leading-relaxed">
@@ -39,7 +39,7 @@
         <div class="h-1" style="background: linear-gradient(to right, #063537, #F97316)"></div>
 
         <div class="px-10 py-9">
-            <h2 class="font-serif text-[1.3rem] font-semibold text-gray-900 mb-1">
+            <h2 class="font-sans text-[1.3rem] font-semibold text-gray-900 mb-1">
                 Votre message
             </h2>
             <p class="text-[13px] text-gray-400 font-light mb-7">
@@ -84,7 +84,7 @@
                     </label>
                     <input type="email" id="email" name="email"
                            value="{{ old('email') }}" required
-                           placeholder="vous@exemple.com"
+                           placeholder="moimm@exemple.com"
                            class="w-full bg-[#f9f7f4] border border-black/10 rounded-xl
                                   px-4 py-3 text-[14px] text-gray-800 font-light
                                   placeholder:text-gray-300
@@ -135,14 +135,14 @@
                      stroke="white" stroke-width="1.5" viewBox="0 0 24 24">
                     <path d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"/>
                 </svg>
-                <span class="font-serif text-[14px] font-semibold text-white">
+                <span class="font-sans text-[14px] font-semibold text-white">
                     Nos coordonnées
                 </span>
             </div>
 
             <div class="p-4 flex flex-col gap-3.5">
                 @foreach([
-                    ['E-mail', 'contact@mbulu.ga', 'M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75'],
+                    ['E-mail', 'contact@biblio.ga', 'M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75'],
                     ['Adresse', 'Libreville, Gabon', 'M15 10.5a3 3 0 11-6 0 3 3 0 016 0zM19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z'],
                     ['Téléphone', '+241 00 00 00 00', 'M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z'],
                 ] as [$label, $value, $path])
@@ -168,7 +168,7 @@
         <div class="relative bg-[#063537] rounded-2xl px-5 py-5 overflow-hidden">
             <div class="absolute -top-8 -right-8 w-28 h-28 rounded-full
                         border border-orange-400/15 pointer-events-none"></div>
-            <p class="font-serif text-[14px] font-semibold text-white mb-3.5
+            <p class="font-sans text-[14px] font-semibold text-white mb-3.5
                       flex items-center gap-2">
                 <span class="w-[5px] h-[5px] rounded-full bg-orange-400"></span>
                 Horaires de support

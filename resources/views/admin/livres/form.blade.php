@@ -27,7 +27,7 @@
         outline: none;
         transition: border-color 0.15s, background 0.15s;
         box-sizing: border-box;
-        font-family: 'DM Sans', sans-serif;
+        font-family: 'Poppins', sans-serif;
     }
     .form-input:focus {
         border-color: #f97316;
@@ -55,7 +55,7 @@
     }
 
     .section-title {
-        font-family: 'Syne', sans-serif;
+        font-family: 'Poppins', sans-serif;
         font-size: 13px;
         font-weight: 700;
         color: #0C1F1F;
@@ -290,7 +290,7 @@
                 <button type="submit"
                         style="width:100%; padding:12px; background:#0C1F1F; color:white; border:none;
                                border-radius:10px; font-size:13.5px; font-weight:600; cursor:pointer;
-                               font-family:'DM Sans',sans-serif; letter-spacing:0.01em;
+                               font-family:'Poppins',sans-serif; letter-spacing:0.01em;
                                transition:background 0.15s; display:flex; align-items:center;
                                justify-content:center; gap:8px; margin-bottom:10px;"
                         onmouseover="this.style.background='#f97316'"

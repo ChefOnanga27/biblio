@@ -24,7 +24,7 @@
                 </svg>
             </div>
         </div>
-        <p style="font-family:'Syne',sans-serif; font-size:36px; font-weight:800; color:#0C1F1F; line-height:1;">
+        <p style="font-family:'Poppins',sans-serif; font-size:36px; font-weight:800; color:#0C1F1F; line-height:1;">
             {{ $users->count() }}
         </p>
         <p style="font-size:12px; color:#9ca3af; margin-top:6px;">inscrits sur la plateforme</p>
@@ -46,7 +46,7 @@
                 </svg>
             </div>
         </div>
-        <p style="font-family:'Syne',sans-serif; font-size:36px; font-weight:800; color:#0C1F1F; line-height:1;">
+        <p style="font-family:'Poppins',sans-serif; font-size:36px; font-weight:800; color:#0C1F1F; line-height:1;">
             {{ $visitorsCount }}
         </p>
         <p style="font-size:12px; color:#9ca3af; margin-top:6px;">visiteurs distincts</p>
@@ -67,7 +67,7 @@
                 </svg>
             </div>
         </div>
-        <p style="font-family:'Syne',sans-serif; font-size:36px; font-weight:800; color:white; line-height:1;">
+        <p style="font-family:'Poppins',sans-serif; font-size:36px; font-weight:800; color:white; line-height:1;">
             {{ $totalVisits }}
         </p>
         <p style="font-size:12px; color:rgba(255,255,255,0.35); margin-top:6px;">pages vues au total</p>
@@ -82,7 +82,7 @@
     <div style="display:flex; align-items:center; justify-content:space-between;
                 padding:20px 24px; border-bottom:1px solid #f5f3ef;">
         <div>
-            <p style="font-family:'Syne',sans-serif; font-size:15px; font-weight:700; color:#0C1F1F;">
+            <p style="font-family:'Poppins',sans-serif; font-size:15px; font-weight:700; color:#0C1F1F;">
                 Utilisateurs inscrits
             </p>
             <p style="font-size:12px; color:#9ca3af; margin-top:2px;">

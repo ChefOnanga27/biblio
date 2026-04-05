@@ -26,17 +26,17 @@
         <div class="flex items-center gap-3 mb-5">
             <span class="w-7 h-0.5 bg-orange-400 rounded"></span>
             <span class="text-[11px] font-medium tracking-[0.12em] uppercase
-                         text-white/45" style="font-family: 'Inter', sans-serif;">À propos de MBULU</span>
+                         text-white/45" style="font-family: 'Poppins', sans-serif;">À propos de MBULU</span>
         </div>
 
         <h1 class="text-5xl font-bold text-white leading-tight mb-5"
-            style="font-family: 'Inter', sans-serif;">
+            style="font-family: 'Poppins', sans-serif;">
             La bibliothèque <span class="text-orange-400">numérique</span><br>
             du patrimoine gabonais
         </h1>
 
         <p class="text-[15px] text-white/55 font-light max-w-lg leading-relaxed"
-           style="font-family: 'Inter', sans-serif;">
+           style="font-family: 'Poppins', sans-serif;">
             Un espace dédié à la littérature, à la culture et au savoir d'Afrique centrale —
             accessible à tous, préservé pour demain.
         </p>
@@ -51,7 +51,7 @@
 </div>
 
 {{-- ── CONTENU ── --}}
-<div class="max-w-3xl mx-auto px-5 py-12" style="font-family: 'Inter', sans-serif;">
+<div class="max-w-3xl mx-auto px-5 py-12" style="font-family: 'Poppins', sans-serif;">
 
     {{-- Intro --}}
     <div class="flex gap-0 mb-12">

@@ -31,7 +31,7 @@
             </div>
 
             {{-- Titre --}}
-            <h1 class="font-serif text-[2rem] font-semibold text-gray-900
+            <h1 class="font-sans text-[2rem] font-semibold text-gray-900
                        leading-snug mb-5">
                 {{ $article->titre }}
             </h1>
