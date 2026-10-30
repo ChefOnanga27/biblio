@@ -1,182 +1,212 @@
 @extends('admin.admin')
 
-@section('title', 'Admin - Tableau de bord')
+@section('title', 'Tableau de bord')
 @section('page-title', 'Tableau de bord')
-@section('page-subtitle', 'Vue d\'ensemble de la plateforme MBULU')
+@section('page-subtitle', 'Vue d\'ensemble de ' . $siteNom . ' sur les ' . $jours . ' derniers jours')
 
 @section('content')
+@php
+    $nombre = fn ($n) => number_format($n, 0, ',', ' ');
+    $tuiles = [
+        ['Livres au catalogue', $nombre($indicateurs['livres']), $indicateurs['contributions'] ? $indicateurs['contributions'] . ' contribution(s) à valider' : 'Aucune contribution en attente', route('admin.livres.index')],
+        ['Lecteurs inscrits', $nombre($indicateurs['lecteurs']), '+' . $nombre($indicateurs['nouveauxLecteurs']) . ' sur ' . $jours . ' jours', null],
+        ['Lectures actives', $nombre($indicateurs['lecturesActives']), $nombre($indicateurs['termines']) . ' livre(s) terminé(s)', route('admin.lectures.index')],
+        ['Note moyenne', $indicateurs['nombreNotes'] ? number_format($indicateurs['noteMoyenne'], 1, ',', '') . ' /5' : '—', $nombre($indicateurs['nombreNotes']) . ' note(s) au total', null],
+    ];
 
-{{-- ── STAT CARDS ── --}}
-<div style="display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:28px;">
+    // Géométrie du graphique (SVG)
+    $largeur = 720; $hauteur = 220; $marge = ['haut' => 12, 'bas' => 28, 'gauche' => 34, 'droite' => 8];
+    $max = max(1, $serie->max('valeur'));
+    $pas = $max <= 4 ? 1 : (int) ceil($max / 4);
+    $plafond = $pas * (int) ceil($max / $pas);
+    $zoneL = $largeur - $marge['gauche'] - $marge['droite'];
+    $zoneH = $hauteur - $marge['haut'] - $marge['bas'];
+    $colonne = $zoneL / $serie->count();
+    $barre = max(4, $colonne - 4);
+    $y = fn ($v) => $marge['haut'] + $zoneH - ($v / $plafond) * $zoneH;
+    $carte = 'background:white; border:1px solid #eceef3; border-radius:16px;';
+    $titre = 'font-size:15px; font-weight:600; color:#121829;';
+@endphp
 
-    {{-- Utilisateurs --}}
-    <div style="background:white; border-radius:14px; border:1px solid #f0ede8; padding:24px 26px; position:relative; overflow:hidden;">
-        <div style="position:absolute; top:-18px; right:-18px; width:80px; height:80px;
-                    border-radius:50%; background:#fff7ed; pointer-events:none;"></div>
-        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;">
-            <span style="font-size:11px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:#9ca3af;">
-                Utilisateurs
-            </span>
-            <div style="width:34px; height:34px; border-radius:9px; background:#fff7ed;
-                        display:flex; align-items:center; justify-content:center;">
-                <svg width="16" height="16" fill="none" stroke="#f97316" stroke-width="1.7" viewBox="0 0 24 24">
-                    <path d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"/>
-                </svg>
-            </div>
+{{-- ═════════ INDICATEURS ═════════ --}}
+<div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(210px, 1fr)); gap:16px; margin-bottom:20px;">
+    @foreach($tuiles as [$libelle, $valeur, $detail, $lien])
+        <div style="{{ $carte }} padding:20px 22px;">
+            <p style="font-size:12.5px; color:#6b7386;">{{ $libelle }}</p>
+            <p style="font-size:32px; font-weight:600; color:#121829; line-height:1.15; margin-top:8px;">{{ $valeur }}</p>
+            @if($lien)
+                <a href="{{ $lien }}" style="display:inline-block; font-size:12.5px; color:#c94f31; margin-top:6px; text-decoration:none;">{{ $detail }} →</a>
+            @else
+                <p style="font-size:12.5px; color:#6b7386; margin-top:6px;">{{ $detail }}</p>
+            @endif
         </div>
-        <p style="font-family:'Poppins',sans-serif; font-size:36px; font-weight:800; color:#0C1F1F; line-height:1;">
-            {{ $users->count() }}
-        </p>
-        <p style="font-size:12px; color:#9ca3af; margin-top:6px;">inscrits sur la plateforme</p>
-    </div>
-
-    {{-- Visiteurs uniques --}}
-    <div style="background:white; border-radius:14px; border:1px solid #f0ede8; padding:24px 26px; position:relative; overflow:hidden;">
-        <div style="position:absolute; top:-18px; right:-18px; width:80px; height:80px;
-                    border-radius:50%; background:#f0fdf4; pointer-events:none;"></div>
-        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;">
-            <span style="font-size:11px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:#9ca3af;">
-                Visiteurs uniques
-            </span>
-            <div style="width:34px; height:34px; border-radius:9px; background:#f0fdf4;
-                        display:flex; align-items:center; justify-content:center;">
-                <svg width="16" height="16" fill="none" stroke="#16a34a" stroke-width="1.7" viewBox="0 0 24 24">
-                    <path d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"/>
-                    <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                </svg>
-            </div>
-        </div>
-        <p style="font-family:'Poppins',sans-serif; font-size:36px; font-weight:800; color:#0C1F1F; line-height:1;">
-            {{ $visitorsCount }}
-        </p>
-        <p style="font-size:12px; color:#9ca3af; margin-top:6px;">visiteurs distincts</p>
-    </div>
-
-    {{-- Visites totales --}}
-    <div style="background:#0C1F1F; border-radius:14px; padding:24px 26px; position:relative; overflow:hidden;">
-        <div style="position:absolute; top:-18px; right:-18px; width:80px; height:80px;
-                    border-radius:50%; background:rgba(249,115,22,0.12); pointer-events:none;"></div>
-        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;">
-            <span style="font-size:11px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:rgba(255,255,255,0.35);">
-                Visites totales
-            </span>
-            <div style="width:34px; height:34px; border-radius:9px; background:rgba(249,115,22,0.15);
-                        display:flex; align-items:center; justify-content:center;">
-                <svg width="16" height="16" fill="none" stroke="#fb923c" stroke-width="1.7" viewBox="0 0 24 24">
-                    <path d="M3 13.5h18M3 10.5h18M3 7.5h18M3 16.5h18"/>
-                </svg>
-            </div>
-        </div>
-        <p style="font-family:'Poppins',sans-serif; font-size:36px; font-weight:800; color:white; line-height:1;">
-            {{ $totalVisits }}
-        </p>
-        <p style="font-size:12px; color:rgba(255,255,255,0.35); margin-top:6px;">pages vues au total</p>
-    </div>
-
+    @endforeach
 </div>
 
-{{-- ── TABLE UTILISATEURS ── --}}
-<div style="background:white; border-radius:16px; border:1px solid #f0ede8; overflow:hidden;">
+<div style="display:grid; grid-template-columns:minmax(0, 2fr) minmax(280px, 1fr); gap:20px;" class="max-xl:!grid-cols-1">
 
-    {{-- Table header --}}
-    <div style="display:flex; align-items:center; justify-content:space-between;
-                padding:20px 24px; border-bottom:1px solid #f5f3ef;">
-        <div>
-            <p style="font-family:'Poppins',sans-serif; font-size:15px; font-weight:700; color:#0C1F1F;">
-                Utilisateurs inscrits
-            </p>
-            <p style="font-size:12px; color:#9ca3af; margin-top:2px;">
-                {{ $users->count() }} compte{{ $users->count() > 1 ? 's' : '' }} au total
-            </p>
+    {{-- ═════════ VISITEURS PAR JOUR ═════════ --}}
+    <section style="{{ $carte }} padding:22px 24px;" x-data="{ tableau: false }">
+        <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+            <div>
+                <h2 style="{{ $titre }}">Visiteurs uniques par jour</h2>
+                <p style="font-size:12.5px; color:#6b7386; margin-top:2px;">{{ $nombre($indicateurs['visiteurs']) }} visites sur {{ $jours }} jours · une visite par adresse IP et par jour</p>
+            </div>
+            <button type="button" @click="tableau = ! tableau" :aria-pressed="tableau.toString()"
+                    style="font-size:12px; color:#121829; background:#f4f5f8; border:1px solid #e5e7eb; border-radius:8px; padding:6px 12px; cursor:pointer;"
+                    x-text="tableau ? 'Voir le graphique' : 'Voir le tableau'">Voir le tableau</button>
         </div>
-        <div style="display:flex; align-items:center; gap:8px;">
-            <div style="position:relative;">
-                <svg style="position:absolute; left:10px; top:50%; transform:translateY(-50%); pointer-events:none;"
-                     width="13" height="13" fill="none" stroke="#9ca3af" stroke-width="1.7" viewBox="0 0 24 24">
-                    <path d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 15.803 7.5 7.5 0 0015.803 15.803z"/>
-                </svg>
-                <input type="text" placeholder="Rechercher..."
-                       style="font-size:12.5px; padding:7px 12px 7px 30px; border:1px solid #e5e7eb;
-                              border-radius:8px; color:#374151; outline:none; width:180px;"
-                       oninput="filterTable(this.value)"
-                       onfocus="this.style.borderColor='#f97316'"
-                       onblur="this.style.borderColor='#e5e7eb'">
+
+        <div x-show="! tableau" style="position:relative; margin-top:16px;" x-data="infobulle()">
+            <svg viewBox="0 0 {{ $largeur }} {{ $hauteur }}" style="width:100%; height:auto; display:block; overflow:visible;"
+                 role="img" aria-label="Histogramme des visiteurs uniques par jour sur {{ $jours }} jours, maximum {{ $max }}"
+                 @mouseleave="masquer()">
+                {{-- Grille et graduations --}}
+                @for($v = 0; $v <= $plafond; $v += $pas)
+                    <line x1="{{ $marge['gauche'] }}" x2="{{ $largeur - $marge['droite'] }}" y1="{{ $y($v) }}" y2="{{ $y($v) }}"
+                          stroke="{{ $v === 0 ? '#c9cdd6' : '#eceef3' }}" stroke-width="1"/>
+                    <text x="{{ $marge['gauche'] - 8 }}" y="{{ $y($v) + 4 }}" text-anchor="end" font-size="11" fill="#6b7386">{{ $v }}</text>
+                @endfor
+
+                @foreach($serie as $i => $point)
+                    @php $x = $marge['gauche'] + $i * $colonne + ($colonne - $barre) / 2; @endphp
+                    @if($point['valeur'] > 0)
+                        @php $h = max(2, $y(0) - $y($point['valeur'])); $r = min(4, $barre / 2, $h); @endphp
+                        {{-- Barre arrondie en haut, ancrée à la ligne de base --}}
+                        <path d="M{{ $x }},{{ $y(0) }} V{{ $y(0) - $h + $r }} Q{{ $x }},{{ $y(0) - $h }} {{ $x + $r }},{{ $y(0) - $h }} H{{ $x + $barre - $r }} Q{{ $x + $barre }},{{ $y(0) - $h }} {{ $x + $barre }},{{ $y(0) - $h + $r }} V{{ $y(0) }} Z"
+                              fill="#e0603f" :opacity="actif === null || actif === {{ $i }} ? 1 : 0.45"/>
+                    @endif
+                    {{-- Zone de survol plus large que la barre --}}
+                    <rect x="{{ $marge['gauche'] + $i * $colonne }}" y="{{ $marge['haut'] }}" width="{{ $colonne }}" height="{{ $zoneH }}" fill="transparent"
+                          @mouseenter="montrer({{ $i }}, @js($point['libelle']), {{ $point['valeur'] }}, $event)"/>
+                    @if($i % 5 === 0 || $loop->last)
+                        <text x="{{ $marge['gauche'] + $i * $colonne + $colonne / 2 }}" y="{{ $hauteur - 8 }}" text-anchor="middle" font-size="11" fill="#6b7386">{{ $point['libelle'] }}</text>
+                    @endif
+                @endforeach
+            </svg>
+
+            <div x-show="actif !== null" x-cloak role="status"
+                 :style="`position:absolute; left:${gauche}px; top:-6px; transform:translateX(-50%); pointer-events:none;`"
+                 style="background:#121829; color:white; font-size:12px; border-radius:8px; padding:6px 10px; white-space:nowrap; box-shadow:0 6px 16px rgba(0,0,0,.15);">
+                <span x-text="date"></span> · <strong x-text="valeur"></strong> <span x-text="valeur > 1 ? 'visiteurs' : 'visiteur'"></span>
             </div>
         </div>
-    </div>
 
-    {{-- Table --}}
-    <table style="width:100%; border-collapse:collapse;" id="users-table">
-        <thead>
-            <tr style="background:#fafaf9;">
-                <th style="padding:11px 24px; font-size:11px; font-weight:600; letter-spacing:0.08em;
-                           text-transform:uppercase; color:#9ca3af; text-align:left; width:48px;">#</th>
-                <th style="padding:11px 16px; font-size:11px; font-weight:600; letter-spacing:0.08em;
-                           text-transform:uppercase; color:#9ca3af; text-align:left;">Nom</th>
-                <th style="padding:11px 16px; font-size:11px; font-weight:600; letter-spacing:0.08em;
-                           text-transform:uppercase; color:#9ca3af; text-align:left;">Email</th>
-                <th style="padding:11px 24px; font-size:11px; font-weight:600; letter-spacing:0.08em;
-                           text-transform:uppercase; color:#9ca3af; text-align:left;">Inscrit le</th>
-            </tr>
-        </thead>
-        <tbody id="table-body">
-            @forelse($users as $user)
-            <tr style="border-top:1px solid #f5f3ef; transition:background 0.1s;"
-                onmouseover="this.style.background='#fafaf9'"
-                onmouseout="this.style.background='transparent'">
+        <div x-show="tableau" x-cloak style="margin-top:14px; max-height:260px; overflow:auto;">
+            <table style="width:100%; border-collapse:collapse; font-size:13px;">
+                <thead><tr style="text-align:left; color:#6b7386;"><th style="padding:6px 8px; font-weight:500;">Jour</th><th style="padding:6px 8px; font-weight:500; text-align:right;">Visiteurs uniques</th></tr></thead>
+                <tbody>
+                    @foreach($serie->reverse() as $point)
+                        <tr style="border-top:1px solid #f1f2f6;"><td style="padding:6px 8px;">{{ $point['libelle'] }}</td><td style="padding:6px 8px; text-align:right;">{{ $point['valeur'] }}</td></tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    </section>
 
-                <td style="padding:14px 24px; font-size:12px; color:#d1d5db; font-weight:500;">
-                    {{ $loop->iteration }}
-                </td>
+    {{-- ═════════ À TRAITER ═════════ --}}
+    <section style="{{ $carte }} padding:22px 24px;">
+        <h2 style="{{ $titre }}">À traiter</h2>
 
-                <td style="padding:14px 16px;">
-                    <div style="display:flex; align-items:center; gap:10px;">
-                        <div style="width:32px; height:32px; border-radius:8px; background:#fff7ed; flex-shrink:0;
-                                    display:flex; align-items:center; justify-content:center;
-                                    font-size:12px; font-weight:700; color:#f97316;">
-                            {{ strtoupper(substr($user->name, 0, 1)) }}
-                        </div>
-                        <span style="font-size:13.5px; font-weight:500; color:#1f2937;">{{ $user->name }}</span>
-                    </div>
-                </td>
+        <a href="{{ route('admin.contributions.index') }}" style="display:flex; align-items:center; justify-content:space-between; margin-top:14px; padding:12px 14px; border-radius:12px; text-decoration:none;
+                  {{ $indicateurs['contributions'] ? 'background:#fdf0ec; color:#c94f31;' : 'background:#f4f5f8; color:#6b7386;' }}">
+            <span style="font-size:13.5px; font-weight:500;">Contributions en attente</span>
+            <span style="font-size:18px; font-weight:600;">{{ $indicateurs['contributions'] }}</span>
+        </a>
+        @foreach($contributions as $contribution)
+            <p style="font-size:12.5px; color:#374151; margin-top:8px; padding-left:4px;">
+                « {{ \Illuminate\Support\Str::limit($contribution->titre, 38) }} » <span style="color:#9ca3af;">par {{ $contribution->user?->name }}</span>
+            </p>
+        @endforeach
 
-                <td style="padding:14px 16px; font-size:13px; color:#6b7280;">
-                    {{ $user->email }}
-                </td>
-
-                <td style="padding:14px 24px;">
-                    <span style="font-size:12px; background:#f5f3ef; color:#6b7280;
-                                 padding:4px 10px; border-radius:20px; font-weight:500;">
-                        {{ $user->created_at->format('d/m/Y') }}
-                    </span>
-                </td>
-
-            </tr>
-            @empty
-            <tr>
-                <td colspan="4" style="padding:48px; text-align:center; color:#9ca3af; font-size:13.5px;">
-                    <div style="display:flex; flex-direction:column; align-items:center; gap:10px;">
-                        <svg width="32" height="32" fill="none" stroke="#d1d5db" stroke-width="1.3" viewBox="0 0 24 24">
-                            <path d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"/>
-                        </svg>
-                        Aucun utilisateur trouvé.
-                    </div>
-                </td>
-            </tr>
-            @endforelse
-        </tbody>
-    </table>
-
+        <p style="font-size:12.5px; font-weight:600; color:#6b7386; text-transform:uppercase; letter-spacing:.06em; margin-top:20px;">Catalogue à compléter</p>
+        @foreach(['image' => 'Livres sans couverture', 'pdf' => 'Livres sans PDF', 'categorie' => 'Livres sans catégorie'] as $cle => $libelle)
+            <a href="{{ route('admin.livres.index', ['manque' => $cle]) }}"
+               style="display:flex; justify-content:space-between; padding:10px 4px; border-bottom:1px solid #f1f2f6; font-size:13.5px; text-decoration:none; color:#121829;">
+                <span>{{ $libelle }}</span>
+                <span style="font-weight:600; color:{{ $aCompleter[$cle] ? '#c94f31' : '#16a34a' }};">{{ $aCompleter[$cle] ?: '✓' }}</span>
+            </a>
+        @endforeach
+    </section>
 </div>
 
-<script>
-function filterTable(query) {
-    const rows = document.querySelectorAll('#table-body tr');
-    const q = query.toLowerCase();
-    rows.forEach(row => {
-        row.style.display = row.textContent.toLowerCase().includes(q) ? '' : 'none';
-    });
-}
-</script>
+<div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:20px; margin-top:20px;">
 
+    {{-- ═════════ LES PLUS LUS ═════════ --}}
+    <section style="{{ $carte }} padding:22px 24px;">
+        <h2 style="{{ $titre }}">Les plus lus</h2>
+        @forelse($plusLus as $livre)
+            <div style="display:flex; align-items:center; gap:12px; padding:10px 0; border-bottom:1px solid #f1f2f6;">
+                <span style="width:22px; font-size:13px; font-weight:600; color:#9ca3af;">{{ $loop->iteration }}</span>
+                <span style="width:34px; height:50px; border-radius:4px; overflow:hidden; background:#e5e7eb; flex:none;">
+                    @if($livre->image)<img src="{{ asset('storage/' . $livre->image) }}" alt="" style="width:100%; height:100%; object-fit:cover;">@endif
+                </span>
+                <div style="min-width:0; flex:1;">
+                    <a href="{{ route('admin.livres.edit', $livre) }}" style="display:block; font-size:13.5px; font-weight:500; color:#121829; text-decoration:none; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ $livre->titre }}</a>
+                    <p style="font-size:12px; color:#6b7386;">{{ $livre->auteur }}</p>
+                </div>
+                <span style="font-size:13px; font-weight:600; color:#121829;">{{ $livre->lectures_count }}</span>
+            </div>
+        @empty
+            <p style="font-size:13px; color:#9ca3af; margin-top:12px;">Aucune lecture pour le moment.</p>
+        @endforelse
+    </section>
+
+    {{-- ═════════ DERNIÈRES LECTURES ═════════ --}}
+    <section style="{{ $carte }} padding:22px 24px;">
+        <div style="display:flex; justify-content:space-between; align-items:baseline;">
+            <h2 style="{{ $titre }}">Dernières lectures</h2>
+            <a href="{{ route('admin.lectures.index') }}" style="font-size:12.5px; color:#c94f31; text-decoration:none;">Tout voir →</a>
+        </div>
+        @forelse($dernieresLectures as $lecture)
+            <div style="padding:10px 0; border-bottom:1px solid #f1f2f6;">
+                <p style="font-size:13.5px; color:#121829;"><strong style="font-weight:500;">{{ $lecture->user?->name }}</strong> <span style="color:#6b7386;">a ouvert</span> {{ \Illuminate\Support\Str::limit($lecture->livre?->titre, 34) }}</p>
+                <p style="font-size:12px; color:#9ca3af;">{{ $lecture->read_at?->locale('fr')->diffForHumans() }}{{ $lecture->progression ? ' · ' . $lecture->progression . ' %' : '' }}</p>
+            </div>
+        @empty
+            <p style="font-size:13px; color:#9ca3af; margin-top:12px;">Aucune lecture pour le moment.</p>
+        @endforelse
+    </section>
+
+    {{-- ═════════ DERNIERS INSCRITS ═════════ --}}
+    <section style="{{ $carte }} padding:22px 24px;">
+        <h2 style="{{ $titre }}">Derniers inscrits</h2>
+        @foreach($derniersInscrits as $user)
+            <div style="display:flex; align-items:center; gap:10px; padding:9px 0; border-bottom:1px solid #f1f2f6;">
+                @if($user->avatar)
+                    <img src="{{ asset('storage/' . $user->avatar) }}" alt="" style="width:32px; height:32px; border-radius:50%; object-fit:cover;">
+                @else
+                    <span style="width:32px; height:32px; border-radius:50%; background:#fdf0ec; color:#c94f31; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:600; flex:none;">{{ mb_strtoupper(mb_substr($user->name, 0, 1)) }}</span>
+                @endif
+                <div style="min-width:0; flex:1;">
+                    <p style="font-size:13.5px; color:#121829; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+                        {{ $user->name }}
+                        @if($user->is_admin)<span style="font-size:10.5px; color:#c94f31; background:#fdf0ec; border-radius:6px; padding:1px 6px; margin-left:4px;">admin</span>@endif
+                    </p>
+                    <p style="font-size:12px; color:#9ca3af; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ $user->email }}</p>
+                </div>
+                <span title="{{ $user->hasVerifiedEmail() ? 'Email vérifié' : 'Email non vérifié' }}" style="font-size:11.5px; color:{{ $user->hasVerifiedEmail() ? '#16a34a' : '#9ca3af' }};">
+                    {{ $user->hasVerifiedEmail() ? '✓ vérifié' : 'non vérifié' }}
+                </span>
+            </div>
+        @endforeach
+    </section>
+</div>
 @endsection
+
+@push('scripts')
+<script>
+    function infobulle() {
+        return {
+            actif: null, date: '', valeur: 0, gauche: 0,
+            montrer(i, date, valeur, e) {
+                const zone = e.target.getBoundingClientRect();
+                const parent = this.$root.getBoundingClientRect();
+                this.actif = i; this.date = date; this.valeur = valeur;
+                this.gauche = zone.left - parent.left + zone.width / 2;
+            },
+            masquer() { this.actif = null; },
+        };
+    }
+</script>
+@endpush

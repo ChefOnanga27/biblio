@@ -47,11 +47,11 @@
         border-radius: 9px;
         outline: none;
         width: 220px;
-        font-family: 'Poppins', sans-serif;
+        font-family: 'IBM Plex Sans', sans-serif;
         color: #374151;
         transition: border-color 0.15s;
     }
-    .search-input:focus { border-color: #f97316; }
+    .search-input:focus { border-color: #e0603f; }
 </style>
 
 {{-- ── TOPBAR ACTIONS ── --}}
@@ -71,16 +71,23 @@
         {{-- Count badge --}}
         <span style="font-size:12px; color:#9ca3af; background:#f5f3ef;
                      padding:5px 12px; border-radius:20px; font-weight:500;">
-            {{ $livres->count() }} ouvrage{{ $livres->count() > 1 ? 's' : '' }}
+            {{ $livres->total() }} ouvrage{{ $livres->total() > 1 ? 's' : '' }}
         </span>
+
+        @if($manque)
+            <a href="{{ route('admin.livres.index') }}" title="Retirer le filtre"
+               style="font-size:12px; color:#c94f31; background:#fdf0ec; padding:5px 12px; border-radius:20px; font-weight:500; text-decoration:none;">
+                {{ ['image' => 'Sans couverture', 'pdf' => 'Sans PDF', 'categorie' => 'Sans catégorie'][$manque] }} ×
+            </a>
+        @endif
     </div>
 
     <a href="{{ route('admin.livres.create') }}"
-       style="display:inline-flex; align-items:center; gap:7px; background:#0C1F1F; color:white;
+       style="display:inline-flex; align-items:center; gap:7px; background:#121829; color:white;
               font-size:13px; font-weight:600; padding:9px 18px; border-radius:10px;
-              text-decoration:none; transition:background 0.15s; font-family:'Poppins',sans-serif;"
-       onmouseover="this.style.background='#f97316'"
-       onmouseout="this.style.background='#0C1F1F'">
+              text-decoration:none; transition:background 0.15s; font-family:'IBM Plex Sans',sans-serif;"
+       onmouseover="this.style.background='#e0603f'"
+       onmouseout="this.style.background='#121829'">
         <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path d="M12 4.5v15m7.5-7.5h-15"/>
         </svg>
@@ -220,7 +227,7 @@
                         </svg>
                         <p style="font-size:14px; font-weight:500; color:#9ca3af;">Aucun livre trouvé</p>
                         <a href="{{ route('admin.livres.create') }}"
-                           style="font-size:12.5px; color:#f97316; text-decoration:none; font-weight:500;">
+                           style="font-size:12.5px; color:#e0603f; text-decoration:none; font-weight:500;">
                             Ajouter le premier livre →
                         </a>
                     </div>

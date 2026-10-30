@@ -1,0 +1,56 @@
+# Lancement complet : application + MySQL + Mailpit (boîte mail de test)
+#   docker compose up -d --build
+#   Site     : http://localhost:8000
+#   Emails   : http://localhost:8025  (codes de vérification, mots de passe oubliés)
+#
+# Les variables viennent de .env ; celles ci-dessous remplacent les valeurs « locales ».
+
+services:
+  app:
+    build: .
+    image: biblio:latest
+    env_file: .env
+    environment:
+      APP_ENV: production
+      APP_DEBUG: "false"
+      APP_URL: http://localhost:8000
+      DB_HOST: db
+      DB_PORT: 3306
+      MAIL_MAILER: smtp
+      MAIL_HOST: mailpit
+      MAIL_PORT: 1025
+      RUN_MIGRATIONS: "true"
+    ports:
+      - "8000:80"
+    volumes:
+      - storage:/var/www/html/storage/app
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+    volumes:
+      - mysql:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+
+  mailpit:
+    image: axllent/mailpit:latest
+    ports:
+      - "8025:8025"
+    restart: unless-stopped
+
+volumes:
+  storage:
+  mysql:

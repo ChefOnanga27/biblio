@@ -1,47 +1,41 @@
-<x-guest-layout>
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
+@extends('layouts.auth')
 
-    <form method="POST" action="{{ route('login') }}">
-        @csrf
+@section('title', 'Connexion — ' . $siteNom)
+@section('auth-title', 'Bon retour sur ' . $siteNom)
+@section('auth-subtitle', 'Accédez à toute la collection et retrouvez vos lectures.')
 
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
+@section('auth')
+<form method="POST" action="{{ route('login') }}" class="space-y-6">
+    @csrf
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
+    <div>
+        <label for="email" class="champ-label">Email</label>
+        <input id="email" type="email" name="email" value="{{ old('email') }}" required autofocus autocomplete="username"
+               placeholder="vous@exemple.com" class="champ">
+        @include('partials.erreur', ['champ' => 'email'])
+    </div>
 
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="current-password" />
-
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
-
-        <!-- Remember Me -->
-        <div class="block mt-4">
-            <label for="remember_me" class="inline-flex items-center">
-                <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="remember">
-                <span class="ms-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
-            </label>
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
+    <div>
+        <div class="flex items-center justify-between">
+            <label for="password" class="champ-label">Mot de passe</label>
             @if (Route::has('password.request'))
-                <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}">
-                    {{ __('Forgot your password?') }}
-                </a>
+                <a href="{{ route('password.request') }}" class="text-[13px] text-brume hover:text-encre mb-2">Mot de passe oublié ?</a>
             @endif
-
-            <x-primary-button class="ms-3">
-                {{ __('Log in') }}
-            </x-primary-button>
         </div>
-    </form>
-</x-guest-layout>
+        @include('partials.champ-mot-de-passe', ['nom' => 'password', 'id' => 'password'])
+        @include('partials.erreur', ['champ' => 'password'])
+    </div>
+
+    <label for="remember_me" class="flex items-center gap-2.5 text-[14px] text-brume cursor-pointer">
+        <input id="remember_me" type="checkbox" name="remember" class="w-4 h-4 rounded accent-[#f07155]">
+        Se souvenir de moi
+    </label>
+
+    <button type="submit" class="btn btn-blanc w-full !py-4">Se connecter</button>
+
+    <p class="text-center text-[14.5px] text-brume">
+        Pas encore de compte ?
+        <a href="{{ route('register') }}" class="font-semibold text-encre hover:text-corail">Inscrivez-vous</a>
+    </p>
+</form>
+@endsection

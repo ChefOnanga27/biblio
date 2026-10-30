@@ -14,12 +14,12 @@
         border-radius: 9px;
         outline: none;
         width: 220px;
-        font-family: 'Poppins', sans-serif;
+        font-family: 'IBM Plex Sans', sans-serif;
         color: #374151;
         transition: border-color 0.15s;
         background: white;
     }
-    .search-input:focus { border-color: #f97316; }
+    .search-input:focus { border-color: #e0603f; }
     .table-row { transition: background 0.1s; }
     .table-row:hover { background: #fafaf9; }
     .btn-icon {
@@ -37,7 +37,7 @@
         color: #6b7280; cursor: pointer; transition: all 0.15s; text-decoration: none;
     }
     .filter-tab.active, .filter-tab:hover {
-        background: #0C1F1F; color: white; border-color: #0C1F1F;
+        background: #121829; color: white; border-color: #121829;
     }
 </style>
 
@@ -76,11 +76,11 @@
     </div>
 
     <a href="{{ route('admin.articles.create') }}"
-       style="display:inline-flex; align-items:center; gap:7px; background:#0C1F1F; color:white;
+       style="display:inline-flex; align-items:center; gap:7px; background:#121829; color:white;
               font-size:13px; font-weight:600; padding:9px 18px; border-radius:10px;
-              text-decoration:none; transition:background 0.15s; font-family:'Poppins',sans-serif;"
-       onmouseover="this.style.background='#f97316'"
-       onmouseout="this.style.background='#0C1F1F'">
+              text-decoration:none; transition:background 0.15s; font-family:'IBM Plex Sans',sans-serif;"
+       onmouseover="this.style.background='#e0603f'"
+       onmouseout="this.style.background='#121829'">
         <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path d="M12 4.5v15m7.5-7.5h-15"/>
         </svg>
@@ -126,9 +126,9 @@
                 {{-- Auteur --}}
                 <td style="padding:14px 16px;">
                     <div style="display:flex; align-items:center; gap:8px;">
-                        <div style="width:28px; height:28px; border-radius:7px; background:#fff7ed;
+                        <div style="width:28px; height:28px; border-radius:7px; background:#fdf0ec;
                                     display:flex; align-items:center; justify-content:center;
-                                    font-size:11px; font-weight:700; color:#f97316; flex-shrink:0;">
+                                    font-size:11px; font-weight:700; color:#e0603f; flex-shrink:0;">
                             {{ strtoupper(substr($article->user->name, 0, 1)) }}
                         </div>
                         <span style="font-size:13px; color:#374151;">{{ $article->user->name }}</span>
@@ -194,7 +194,7 @@
                         </svg>
                         <p style="font-size:14px; font-weight:500; color:#9ca3af;">Aucun article trouvé</p>
                         <a href="{{ route('admin.articles.create') }}"
-                           style="font-size:12.5px; color:#f97316; text-decoration:none; font-weight:500;">
+                           style="font-size:12.5px; color:#e0603f; text-decoration:none; font-weight:500;">
                             Rédiger le premier article →
                         </a>
                     </div>
@@ -223,7 +223,7 @@
             <a href="{{ $articles->previousPageUrl() }}"
                style="display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;
                       border-radius:8px;border:1px solid #e5e7eb;background:white;color:#6b7280;text-decoration:none;transition:all 0.15s;"
-               onmouseover="this.style.borderColor='#f97316';this.style.color='#f97316'"
+               onmouseover="this.style.borderColor='#e0603f';this.style.color='#e0603f'"
                onmouseout="this.style.borderColor='#e5e7eb';this.style.color='#6b7280'">
                 <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path d="M15.75 19.5L8.25 12l7.5-7.5"/></svg>
             </a>
@@ -232,7 +232,7 @@
         @foreach($articles->getUrlRange(max(1, $articles->currentPage()-2), min($articles->lastPage(), $articles->currentPage()+2)) as $page => $url)
             @if($page == $articles->currentPage())
                 <span style="display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;
-                             border-radius:8px;background:#0C1F1F;color:white;font-size:13px;font-weight:600;">
+                             border-radius:8px;background:#121829;color:white;font-size:13px;font-weight:600;">
                     {{ $page }}
                 </span>
             @else
@@ -240,7 +240,7 @@
                    style="display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;
                           border-radius:8px;border:1px solid #e5e7eb;background:white;color:#6b7280;
                           font-size:13px;text-decoration:none;transition:all 0.15s;"
-                   onmouseover="this.style.borderColor='#f97316';this.style.color='#f97316'"
+                   onmouseover="this.style.borderColor='#e0603f';this.style.color='#e0603f'"
                    onmouseout="this.style.borderColor='#e5e7eb';this.style.color='#6b7280'">
                     {{ $page }}
                 </a>
@@ -251,7 +251,7 @@
             <a href="{{ $articles->nextPageUrl() }}"
                style="display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;
                       border-radius:8px;border:1px solid #e5e7eb;background:white;color:#6b7280;text-decoration:none;transition:all 0.15s;"
-               onmouseover="this.style.borderColor='#f97316';this.style.color='#f97316'"
+               onmouseover="this.style.borderColor='#e0603f';this.style.color='#e0603f'"
                onmouseout="this.style.borderColor='#e5e7eb';this.style.color='#6b7280'">
                 <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path d="M8.25 4.5l7.5 7.5-7.5 7.5"/></svg>
             </a>

@@ -27,18 +27,18 @@
         outline: none;
         transition: border-color 0.15s, background 0.15s;
         box-sizing: border-box;
-        font-family: 'Poppins', sans-serif;
+        font-family: 'IBM Plex Sans', sans-serif;
     }
-    .form-input:focus { border-color: #f97316; background: white; }
+    .form-input:focus { border-color: #e0603f; background: white; }
     .form-input.error { border-color: #fca5a5; background: #fff8f8; }
     .form-input::placeholder { color: #d1d5db; }
     textarea.form-input { resize: vertical; line-height: 1.6; }
     .field-group { margin-bottom: 20px; }
     .section-title {
-        font-family: 'Poppins', sans-serif;
+        font-family: 'IBM Plex Sans', sans-serif;
         font-size: 13px;
         font-weight: 700;
-        color: #0C1F1F;
+        color: #121829;
         padding-bottom: 12px;
         border-bottom: 1px solid #f0ede8;
         margin-bottom: 20px;
@@ -46,7 +46,7 @@
         align-items: center;
         gap: 8px;
     }
-    .section-title .dot { width:6px; height:6px; border-radius:50%; background:#f97316; flex-shrink:0; }
+    .section-title .dot { width:6px; height:6px; border-radius:50%; background:#e0603f; flex-shrink:0; }
     .upload-zone {
         border: 1.5px dashed #e5e7eb;
         border-radius: 12px;
@@ -57,7 +57,7 @@
         transition: border-color 0.15s, background 0.15s;
         position: relative;
     }
-    .upload-zone:hover { border-color: #f97316; background: #fff7ed; }
+    .upload-zone:hover { border-color: #e0603f; background: #fdf0ec; }
     .upload-zone input[type="file"] {
         position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
     }
@@ -98,7 +98,7 @@
                 <p class="section-title"><span class="dot"></span> Contenu de l'article</p>
 
                 <div class="field-group">
-                    <label for="titre" class="form-label">Titre <span style="color:#f97316;">*</span></label>
+                    <label for="titre" class="form-label">Titre <span style="color:#e0603f;">*</span></label>
                     <input type="text" name="titre" id="titre"
                            value="{{ old('titre', $article->titre) }}"
                            placeholder="Un titre accrocheur et clair…"
@@ -119,7 +119,7 @@
                 </div>
 
                 <div class="field-group" style="margin-bottom:0;">
-                    <label for="contenu" class="form-label">Contenu complet <span style="color:#f97316;">*</span></label>
+                    <label for="contenu" class="form-label">Contenu complet <span style="color:#e0603f;">*</span></label>
                     <textarea name="contenu" id="contenu" rows="16"
                               placeholder="Rédigez votre article ici…"
                               class="form-input {{ $errors->has('contenu') ? 'error' : '' }}"
@@ -140,7 +140,7 @@
             <div style="background:white; border-radius:16px; border:1px solid #f0ede8; padding:24px;">
                 <p class="section-title"><span class="dot"></span> Image de couverture
                     @if(!$article->exists)
-                        <span style="font-size:10px; font-weight:600; color:#f97316; background:#fff7ed;
+                        <span style="font-size:10px; font-weight:600; color:#e0603f; background:#fdf0ec;
                                      padding:2px 7px; border-radius:20px; margin-left:auto;">Requis</span>
                     @endif
                 </p>
@@ -208,12 +208,12 @@
                 <p class="section-title"><span class="dot"></span> Actions</p>
 
                 <button type="submit"
-                        style="width:100%; padding:12px; background:#0C1F1F; color:white; border:none;
+                        style="width:100%; padding:12px; background:#121829; color:white; border:none;
                                border-radius:10px; font-size:13.5px; font-weight:600; cursor:pointer;
-                               font-family:'Poppins',sans-serif; transition:background 0.15s;
+                               font-family:'IBM Plex Sans',sans-serif; transition:background 0.15s;
                                display:flex; align-items:center; justify-content:center; gap:8px; margin-bottom:10px;"
-                        onmouseover="this.style.background='#f97316'"
-                        onmouseout="this.style.background='#0C1F1F'">
+                        onmouseover="this.style.background='#e0603f'"
+                        onmouseout="this.style.background='#121829'">
                     <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
                         <path d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>

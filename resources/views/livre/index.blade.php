@@ -1,177 +1,232 @@
-@extends('base')
+@extends('layouts.site')
 
-@section('title', 'Bibliothèque - Biblio')
+@section('title', 'Rechercher — ' . $siteNom)
 
 @section('content')
+@php
+    // Filtres actifs, affichés en « puces » supprimables
+    $puces = collect([
+        'search' => request('search') ? '« ' . request('search') . ' »' : null,
+        'categorie' => optional($categories->firstWhere('id', request('categorie')))->nom,
+        'auteur' => optional($auteurs->firstWhere('id', request('auteur')))->nom,
+        'genre' => optional($genres->firstWhere('id', request('genre')))->nom,
+        'langue' => request('langue'),
+        'annee' => request('annee'),
+    ])->filter();
 
-{{-- ── HERO ── --}}
-<section class="relative overflow-hidden px-8 py-16">
+    $selecteur = 'appearance-none h-11 rounded-full bg-surface-2 border border-white/5 pl-5 pr-10 text-[14.5px] text-encre
+                  outline-none cursor-pointer transition-colors hover:border-white/15 focus:border-corail/60 disabled:opacity-40 disabled:cursor-default';
+    $chevron = '<svg class="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2" width="12" height="12" fill="currentColor" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>';
+@endphp
 
-    {{-- Image de fond --}}
-    <img src="/amadou.webp" alt=""
-         class="absolute inset-0 w-full h-full object-cover">
-    <div class="absolute inset-0"></div>
-
-    {{-- Cercles décoratifs --}}
-    <div class="absolute -top-20 -right-14 w-96 h-96 rounded-full
-                border border-orange-400/[0.13] pointer-events-none"></div>
-    <div class="absolute -bottom-12 left-16 w-52 h-52 rounded-full
-                border border-white/[0.05] pointer-events-none"></div>
-    <div class="absolute top-8 right-36 w-[70px] h-[70px] rounded-full
-                bg-orange-400/[0.08] pointer-events-none"></div>
-
-    <div class="relative z-10 max-w-3xl mx-auto text-center">
-
-        {{-- Eyebrow --}}
-        <div class="inline-flex items-center gap-2.5 mb-5
-                    bg-white/[0.07] border border-white/[0.15] rounded-full px-5 py-1.5">
-            <span class="w-[5px] h-[5px] rounded-full bg-orange-400"></span>
-            <span class="text-[11px] font-medium tracking-[0.1em] uppercase text-white/55">
-                Bibliothèque Biblio
-            </span>
+{{-- ═════════ FILTRES ═════════ --}}
+<form id="catalogue-filtres" method="GET" action="{{ route('livre.index') }}" class="no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0 overflow-x-auto">
+    <div class="flex items-center gap-3 w-max sm:w-auto sm:flex-wrap pb-1">
+        <div class="relative flex-none">
+            <label for="filtre-categorie" class="sr-only">Parcourir par catégorie</label>
+            <select id="filtre-categorie" name="categorie" class="{{ $selecteur }} !bg-[#232b42] font-medium">
+                <option value="" class="bg-surface">Parcourir</option>
+                @foreach($categories as $categorie)
+                    <option value="{{ $categorie->id }}" @selected((string) request('categorie') === (string) $categorie->id) class="bg-surface">
+                        {{ $categorie->nom }} ({{ $categorie->livres_count }})
+                    </option>
+                @endforeach
+            </select>
+            {!! $chevron !!}
         </div>
 
-        <h1 class="font-serif text-5xl font-semibold text-white leading-tight mb-4">
-            Trouvez votre prochain<br>
-            <em class="italic text-orange-400">livre</em>
-        </h1>
-        <p class="text-[14.5px] text-white font-light mb-9">
-            Recherchez parmi des centaines de livres, auteurs et catégories
-        </p>
-
-        {{-- Formulaire --}}
-        <form method="GET" action="{{ route('livre.index') }}" class="space-y-3">
-
-            {{-- Barre de recherche --}}
-            <div class="flex bg-white rounded-2xl overflow-hidden border border-black/[0.10]
-                        shadow-[0_8px_32px_rgba(0,0,0,0.15)]">
-                <input type="text" name="search" value="{{ request('search') }}"
-                       placeholder="Rechercher un titre, un auteur..."
-                       class="flex-1 px-5 py-4 text-[15px] font-light text-gray-800
-                              placeholder:text-gray-300 bg-transparent
-                              focus:outline-none">
-                <button type="submit"
-                        class="flex items-center gap-2 bg-orange-500 hover:bg-orange-600
-                               text-white px-7 py-4 text-[14px] font-medium
-                               transition-colors whitespace-nowrap">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor"
-                         stroke-width="2" viewBox="0 0 24 24">
-                        <path d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 15.803 7.5 7.5 0 0015.803 15.803z"/>
-                    </svg>
-                    Rechercher
-                </button>
-            </div>
-
-            {{-- Filtres --}}
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-2.5">
-
-                <select name="categorie"
-                        class="w-full bg-white/10 border border-white/20 rounded-xl
-                               px-4 py-3 text-[13px] font-light text-white
-                               focus:outline-none focus:bg-white/[0.18] focus:border-orange-400/50
-                               transition-colors appearance-none">
-                    <option value="">Catégories</option>
-                    @foreach($categories as $categorie)
-                        <option value="{{ $categorie->id }}"
-                                {{ request('categorie') == $categorie->id ? 'selected' : '' }}
-                                style="background:#063537">
-                            {{ $categorie->nom }}
-                        </option>
+        @foreach([
+            ['auteur', 'Auteur', $auteurs->map(fn ($a) => [$a->id, $a->nom])],
+            ['genre', 'Genre', $genres->map(fn ($g) => [$g->id, $g->nom])],
+            ['langue', 'Langue', $langues->map(fn ($l) => [$l, $l])],
+        ] as [$nom, $libelle, $options])
+            <div class="relative flex-none">
+                <label for="filtre-{{ $nom }}" class="sr-only">{{ $libelle }}</label>
+                <select id="filtre-{{ $nom }}" name="{{ $nom }}" class="{{ $selecteur }} max-w-[220px]" @disabled($options->isEmpty())>
+                    <option value="" class="bg-surface">{{ $libelle }}</option>
+                    @foreach($options as [$valeur, $texte])
+                        <option value="{{ $valeur }}" @selected((string) request($nom) === (string) $valeur) class="bg-surface">{{ $texte }}</option>
                     @endforeach
                 </select>
-
-                <select name="genre"
-                        class="w-full bg-white/10 border border-white/20 rounded-xl
-                               px-4 py-3 text-[13px] font-light text-white
-                               focus:outline-none focus:bg-white/[0.18] focus:border-orange-400/50
-                               transition-colors appearance-none">
-                    <option value="">Genres</option>
-                    @foreach($genres as $genre)
-                        <option value="{{ $genre->id }}"
-                                {{ request('genre') == $genre->id ? 'selected' : '' }}
-                                style="background:#063537">
-                            {{ $genre->nom }}
-                        </option>
-                    @endforeach
-                </select>
-
-                <select name="auteur"
-                        class="w-full bg-white/10 border border-white/20 rounded-xl
-                               px-4 py-3 text-[13px] font-light text-white
-                               focus:outline-none focus:bg-white/[0.18] focus:border-orange-400/50
-                               transition-colors appearance-none">
-                    <option value="">Auteurs</option>
-                    @foreach($auteurs as $auteur)
-                        <option value="{{ $auteur->id }}"
-                                {{ request('auteur') == $auteur->id ? 'selected' : '' }}
-                                style="background:#063537">
-                            {{ $auteur->nom }}
-                        </option>
-                    @endforeach
-                </select>
-
-                <input type="number" name="annee" value="{{ request('annee') }}"
-                       placeholder="Année (ex: 2001)"
-                       class="w-full bg-white/10 border border-white/20 rounded-xl
-                              px-4 py-3 text-[13px] font-light text-white
-                              placeholder:text-white/35
-                              focus:outline-none focus:bg-white/[0.18] focus:border-orange-400/50
-                              transition-colors [appearance:textfield]">
+                {!! $chevron !!}
             </div>
+        @endforeach
 
-        </form>
+        <div class="flex-none">
+            <label for="filtre-annee" class="sr-only">Année de publication</label>
+            <input id="filtre-annee" type="number" name="annee" value="{{ request('annee') }}" min="1000" max="{{ date('Y') }}" placeholder="Année"
+                   class="w-[110px] h-11 rounded-full bg-surface-2 border border-white/5 px-5 text-[14.5px] text-encre placeholder:text-brume outline-none
+                          transition-colors hover:border-white/15 focus:border-corail/60 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none">
+        </div>
+
+        <div class="relative flex-none sm:ml-auto">
+            <label for="filtre-tri" class="sr-only">Trier par</label>
+            <select id="filtre-tri" name="tri" class="{{ $selecteur }}">
+                @foreach($tris as $valeur => $texte)
+                    <option value="{{ $valeur }}" @selected($tri === $valeur) class="bg-surface">Trier : {{ $texte }}</option>
+                @endforeach
+            </select>
+            {!! $chevron !!}
+        </div>
     </div>
-</section>
+</form>
 
-{{-- ── CATALOGUE ── --}}
-<section class="max-w-5xl mx-auto px-5 py-9">
+{{-- Filtres actifs --}}
+<div id="catalogue-chips" data-region class="flex flex-wrap items-center gap-2 {{ $puces->isNotEmpty() ? 'mt-4' : '' }}">
+    @foreach($puces as $cle => $libelle)
+        <a href="{{ request()->fullUrlWithQuery([$cle => null, 'page' => null]) }}" data-ajax
+           class="inline-flex items-center gap-1.5 text-[13px] text-encre bg-white/[0.06] hover:bg-corail hover:text-white rounded-full pl-3.5 pr-2.5 py-1.5 transition-colors">
+            {{ $libelle }}
+            <span aria-hidden="true" class="text-[15px] leading-none">×</span>
+            <span class="sr-only">Retirer ce filtre</span>
+        </a>
+    @endforeach
+    @if($puces->count() > 1)
+        <a href="{{ route('livre.index') }}" data-ajax class="text-[13px] text-voile hover:text-corail ml-1">Tout effacer</a>
+    @endif
+</div>
 
-    <div class="flex items-center justify-between mb-6">
-        <h2 class="font-serif text-[1.4rem] font-semibold text-gray-900
-                   flex items-center gap-3
-                   after:content-[''] after:inline-block after:w-10
-                   after:h-px after:bg-black/15">
-            Catalogue
-        </h2>
-        <span class="text-[12px] text-gray-400">
-            {{ $livres->total() }} ouvrage{{ $livres->total() > 1 ? 's' : '' }}
-        </span>
-    </div>
-
-    {{-- Grille livres --}}
-    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-        @forelse($livres as $livre)
-            @include('livre.card')
-        @empty
-            <div class="col-span-full text-center py-16">
-                <div class="text-5xl mb-4 opacity-20">📚</div>
-                <p class="text-[14px] text-gray-400">Aucun livre ne correspond à votre recherche.</p>
-                <a href="{{ route('livre.index') }}"
-                   class="inline-flex items-center gap-2 mt-4 text-[13px] text-[#063537]
-                          border border-[#063537]/30 rounded-full px-5 py-2
-                          hover:bg-[#063537]/5 transition-colors">
-                    Réinitialiser les filtres
-                </a>
-            </div>
-        @endforelse
-    </div>
-
-    {{-- Pagination --}}
-    <div class="mt-8">
-        {{ $livres->links() }}
-    </div>
-
-    {{-- Watermark --}}
-    <p class="text-center mt-10 text-[10px] font-medium tracking-[0.25em]
-              uppercase text-gray-300">
-        B <span class="inline-block w-[3px] h-[3px] rounded-full bg-orange-400 mx-1 align-middle"></span>
-        I <span class="inline-block w-[3px] h-[3px] rounded-full bg-orange-400 mx-1 align-middle"></span>
-        B <span class="inline-block w-[3px] h-[3px] rounded-full bg-orange-400 mx-1 align-middle"></span>
-        L <span class="inline-block w-[3px] h-[3px] rounded-full bg-orange-400 mx-1 align-middle"></span>
-        I <span class="inline-block w-[3px] h-[3px] rounded-full bg-orange-400 mx-1 align-middle"></span>
-        O <span class="inline-block w-[3px] h-[3px] rounded-full bg-orange-400 mx-1 align-middle"></span>
+{{-- ═════════ RÉSULTATS ═════════ --}}
+<section id="catalogue-results" data-region aria-live="polite" class="mt-8 transition-opacity duration-200">
+    <p class="text-[14px] text-brume mb-2">
+        <span class="font-semibold text-encre">{{ $livres->total() }}</span>
+        ouvrage{{ $livres->total() > 1 ? 's' : '' }}
+        {{ request('search') ? 'pour « ' . request('search') . ' »' : 'dans le catalogue' }}
     </p>
 
+    @if($livres->isNotEmpty())
+        <div class="hidden lg:grid grid-cols-[minmax(0,2.6fr)_90px_minmax(0,1.3fr)_minmax(0,1.2fr)_minmax(0,1fr)_44px_104px] gap-x-6
+                    pt-6 pb-4 border-b border-ligne text-[17px] text-encre font-medium" aria-hidden="true">
+            <span>Titre</span><span>Note</span><span>Catégorie</span><span>Disponibilité</span><span>Statut</span>
+        </div>
+
+        <ul aria-label="Résultats de la recherche">
+            @foreach($livres as $livre)
+                @include('livre.ligne', ['estFavori' => in_array($livre->id, $favorisIds)])
+            @endforeach
+        </ul>
+
+        <div class="mt-10" data-pagination>
+            {{ $livres->onEachSide(1)->links('partials.pagination') }}
+        </div>
+    @else
+        <div class="mt-6 text-center py-20 px-6 rounded-2xl border border-ligne bg-surface/60">
+            <span class="mx-auto mb-5 w-16 h-16 rounded-2xl bg-corail/10 text-corail flex items-center justify-center">
+                <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M21 21l-5.2-5.2M17 10.5a6.5 6.5 0 11-13 0 6.5 6.5 0 0113 0z"/></svg>
+            </span>
+            <p class="text-[17px] font-semibold">Aucun ouvrage trouvé.</p>
+            <p class="text-[14px] text-brume mt-1">Essayez une autre recherche.</p>
+            @if($puces->isNotEmpty())
+                <a href="{{ route('livre.index') }}" data-ajax class="btn btn-discret mt-6">Réinitialiser les filtres</a>
+            @endif
+        </div>
+    @endif
 </section>
 
+<div id="catalogue-toast" role="status" aria-live="polite"
+     class="fixed bottom-24 lg:bottom-6 left-1/2 -translate-x-1/2 z-50 bg-encre text-[#0b1020] text-[13.5px] font-medium
+            rounded-full px-5 py-2.5 shadow-lg opacity-0 translate-y-2 pointer-events-none transition-all duration-300"></div>
 @endsection
+
+@push('scripts')
+<script>
+// Recherche dynamique : la barre du haut et les filtres mettent à jour les résultats sans recharger la page.
+// Sans JavaScript, tout fonctionne avec des liens et formulaires classiques.
+(function () {
+    const base = @json(route('livre.index'));
+    const formulaires = ['shell-recherche-form', 'catalogue-filtres'].map(id => document.getElementById(id)).filter(Boolean);
+    const champs = () => formulaires.flatMap(f => [...f.querySelectorAll('input[name], select[name]')]);
+    let minuteur = null, requete = null;
+
+    function urlCourante() {
+        const params = new URLSearchParams();
+        champs().forEach(c => { if (c.value) params.set(c.name, c.value); });
+        const q = params.toString();
+        return base + (q ? '?' + q : '');
+    }
+
+    function synchroniser(url) {
+        const params = new URL(url, location.href).searchParams;
+        champs().forEach(function (c) {
+            if (c === document.activeElement && c.type === 'search') return;
+            if (c.name === 'tri' && !params.get('tri')) return;
+            c.value = params.get(c.name) || '';
+        });
+    }
+
+    async function charger(url, historique = true) {
+        if (requete) requete.abort();
+        requete = new AbortController();
+        document.getElementById('catalogue-results').style.opacity = '0.45';
+        try {
+            const reponse = await fetch(url, { headers: { 'X-Requested-With': 'fetch' }, signal: requete.signal });
+            const page = new DOMParser().parseFromString(await reponse.text(), 'text/html');
+            document.querySelectorAll('[data-region]').forEach(function (region) {
+                const nouvelle = page.getElementById(region.id);
+                if (nouvelle) region.replaceWith(nouvelle);
+            });
+            if (historique) history.pushState({}, '', url);
+            synchroniser(url);
+        } catch (e) {
+            if (e.name !== 'AbortError') location.href = url;
+        } finally {
+            document.getElementById('catalogue-results').style.opacity = '';
+        }
+    }
+
+    formulaires.forEach(function (form) {
+        form.addEventListener('submit', e => { e.preventDefault(); clearTimeout(minuteur); charger(urlCourante()); });
+        form.addEventListener('input', function (e) {
+            // Les deux sélecteurs de catégorie (barre du haut, filtres) restent alignés
+            if (e.target.name === 'categorie') champs().filter(c => c.name === 'categorie').forEach(c => c.value = e.target.value);
+            clearTimeout(minuteur);
+            const delai = ['search', 'number'].includes(e.target.type) ? 350 : 0;
+            minuteur = setTimeout(() => charger(urlCourante()), delai);
+        });
+    });
+
+    document.addEventListener('click', function (e) {
+        const lien = e.target.closest('a[data-ajax], [data-pagination] a');
+        if (!lien || e.metaKey || e.ctrlKey || e.shiftKey) return;
+        e.preventDefault();
+        charger(lien.href);
+        if (lien.closest('[data-pagination]')) document.getElementById('catalogue-results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
+    window.addEventListener('popstate', () => charger(location.href, false));
+
+    // Favoris sans rechargement
+    const toast = document.getElementById('catalogue-toast');
+    function afficher(message) {
+        toast.textContent = message;
+        toast.classList.remove('opacity-0', 'translate-y-2');
+        clearTimeout(toast._t);
+        toast._t = setTimeout(() => toast.classList.add('opacity-0', 'translate-y-2'), 2200);
+    }
+
+    document.addEventListener('submit', async function (e) {
+        const form = e.target.closest('form[data-favori]');
+        if (!form) return;
+        e.preventDefault();
+        const bouton = form.querySelector('button');
+        bouton.disabled = true;
+        try {
+            const reponse = await fetch(form.action, { method: 'POST', headers: { 'Accept': 'application/json' }, body: new FormData(form) });
+            if (!reponse.ok) throw new Error();
+            const data = await reponse.json();
+            const titre = bouton.getAttribute('aria-label').split(' : ').slice(1).join(' : ');
+            const libelle = data.favori ? 'Retirer des favoris' : 'Ajouter aux favoris';
+            bouton.setAttribute('aria-pressed', data.favori ? 'true' : 'false');
+            bouton.setAttribute('aria-label', libelle + ' : ' + titre);
+            bouton.title = libelle;
+            bouton.querySelector('[data-coeur]').setAttribute('fill', data.favori ? 'currentColor' : 'none');
+            afficher(data.message);
+        } catch (_) {
+            form.submit();
+        } finally {
+            bouton.disabled = false;
+        }
+    });
+})();
+</script>
+@endpush

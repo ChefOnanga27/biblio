@@ -9,6 +9,8 @@ class Auteur extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['nom'];
+
     public function livres()
     {
         return $this->hasMany(\App\Models\Livre::class);

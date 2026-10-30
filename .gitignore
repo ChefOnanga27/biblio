@@ -16,3 +16,7 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
+/.vs
+/.phpunit.result.cache
+# Maquettes de travail (contiennent des couvertures sous droits)
+/public/Digital Library (Community)/

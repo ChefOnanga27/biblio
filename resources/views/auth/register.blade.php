@@ -1,52 +1,50 @@
-<x-guest-layout>
-    <form method="POST" action="{{ route('register') }}">
-        @csrf
+@extends('layouts.auth')
 
-        <!-- Name -->
-        <div>
-            <x-input-label for="name" :value="__('Name')" />
-            <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
-            <x-input-error :messages="$errors->get('name')" class="mt-2" />
-        </div>
+@section('title', 'Créer un compte — ' . $siteNom)
+@section('auth-title', 'Créez votre compte lecteur')
+@section('auth-subtitle', 'Remplissez ces quelques champs pour accéder à la bibliothèque. Un code de vérification vous sera envoyé par email.')
 
-        <!-- Email Address -->
-        <div class="mt-4">
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
+@section('auth')
+<form method="POST" action="{{ route('register') }}" enctype="multipart/form-data" class="space-y-5"
+      x-data="{ fichier: '' }">
+    @csrf
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
+    <div>
+        <label for="name" class="champ-label">Nom complet</label>
+        <input id="name" type="text" name="name" value="{{ old('name') }}" required autofocus autocomplete="name"
+               placeholder="Prénom Nom" class="champ">
+        @include('partials.erreur', ['champ' => 'name'])
+    </div>
 
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="new-password" />
+    <div>
+        <label for="email" class="champ-label">Email</label>
+        <input id="email" type="email" name="email" value="{{ old('email') }}" required autocomplete="username"
+               placeholder="vous@exemple.com" class="champ">
+        @include('partials.erreur', ['champ' => 'email'])
+    </div>
 
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
+    <div>
+        <label for="password" class="champ-label">Mot de passe</label>
+        @include('partials.champ-mot-de-passe', ['nom' => 'password', 'id' => 'password', 'autocomplete' => 'new-password'])
+        @include('partials.erreur', ['champ' => 'password'])
+    </div>
 
-        <!-- Confirm Password -->
-        <div class="mt-4">
-            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
+    <div>
+        <span class="champ-label">Photo de profil <span class="text-voile">(facultatif)</span></span>
+        <label for="avatar" class="champ flex items-center justify-center gap-2.5 cursor-pointer hover:bg-[#262e43] text-brume">
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/></svg>
+            <span x-text="fichier || 'Choisir une image'">Choisir une image</span>
+        </label>
+        <input id="avatar" type="file" name="avatar" accept="image/png,image/jpeg,image/webp" class="sr-only"
+               @change="fichier = $event.target.files[0]?.name || ''">
+        @include('partials.erreur', ['champ' => 'avatar'])
+    </div>
 
-            <x-text-input id="password_confirmation" class="block mt-1 w-full"
-                            type="password"
-                            name="password_confirmation" required autocomplete="new-password" />
+    <button type="submit" class="btn btn-blanc w-full !py-4 !mt-8">Créer mon compte</button>
 
-            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
-            <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}">
-                {{ __('Already registered?') }}
-            </a>
-
-            <x-primary-button class="ms-4">
-                {{ __('Register') }}
-            </x-primary-button>
-        </div>
-    </form>
-</x-guest-layout>
+    <p class="text-center text-[14.5px] text-brume">
+        Déjà inscrit ?
+        <a href="{{ route('login') }}" class="font-semibold text-encre hover:text-corail">Se connecter</a>
+    </p>
+</form>
+@endsection

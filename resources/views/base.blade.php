@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <title>@yield('title', 'MBULU')</title>
     <style>
@@ -249,6 +250,96 @@
             transition: all 0.2s;
         }
 
+        /* ── COMPOSANTS PARTAGÉS (carrousels, apparitions) ── */
+        .no-scrollbar { scrollbar-width: none; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+
+        .carousel-btn {
+            width: 34px; height: 34px;
+            align-items: center; justify-content: center;
+            border-radius: 50%;
+            border: 1px solid #e0ddd8;
+            background: white;
+            color: #063537;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .carousel-btn:hover:not(:disabled) { background: #063537; border-color: #063537; color: white; }
+        .carousel-btn:disabled { opacity: 0.35; cursor: default; }
+
+        /* ── LIVRE 3D : dos à gauche, tranche des pages et 4e de couverture en bas ──
+           <div class="livre-3d">
+               <div class="livre-3d__couverture …">…image… <span class="livre-3d__dos"></span></div>
+               <span class="livre-3d__pages"></span>
+           </div>
+           Couleur de la 4e de couverture : --dos (teal par défaut). */
+        .livre-3d {
+            --dos: #063537;
+            position: relative;
+            filter: drop-shadow(0 6px 10px rgba(6, 53, 55, 0.18));
+            transition: transform 0.3s ease, filter 0.3s ease;
+        }
+        .livre-3d.sur-fond-sombre { --dos: #0f5457; filter: drop-shadow(0 18px 26px rgba(0, 0, 0, 0.45)); }
+        .group:hover .livre-3d.anime,
+        .livre-3d.anime:hover {
+            transform: translateY(-5px);
+            filter: drop-shadow(0 16px 22px rgba(6, 53, 55, 0.28));
+        }
+        .livre-3d__couverture {
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+            border-radius: 2px 6px 6px 2px;
+        }
+        .livre-3d__dos {
+            position: absolute;
+            inset: 0 auto 0 0;
+            width: 9%;
+            z-index: 3;
+            pointer-events: none;
+            background: linear-gradient(90deg, rgba(0,0,0,0.42) 0%, rgba(0,0,0,0.18) 55%, rgba(255,255,255,0.28) 80%, rgba(0,0,0,0.22) 100%);
+        }
+        .livre-3d__dos::before,
+        .livre-3d__dos::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            width: 140%;
+            height: 6%;
+            border-top: 2px solid rgba(255,255,255,0.9);
+            border-bottom: 2px solid rgba(255,255,255,0.9);
+            border-radius: 0 100% 100% 0 / 0 50% 50% 0;
+        }
+        .livre-3d__dos::before { top: 6%; }
+        .livre-3d__dos::after { bottom: 6%; }
+        .livre-3d__pages {
+            position: relative;
+            display: block;
+            margin: -4% 0 0 2%;
+            padding-top: 9%;
+            background: var(--dos);
+            border-radius: 0 0 6px 7px;
+        }
+        .livre-3d__pages::before {
+            content: '';
+            position: absolute;
+            left: 4%;
+            right: 2.5%;
+            top: 0;
+            height: 62%;
+            border-radius: 0 0 2px 2px;
+            background: repeating-linear-gradient(180deg, #f4f6f7 0 1.5px, #d3dbe0 1.5px 3px);
+        }
+
+        .reveal { opacity: 0; transform: translateY(16px); transition: opacity 0.6s ease, transform 0.6s ease; }
+        .reveal.is-visible { opacity: 1; transform: none; }
+
+        @media (prefers-reduced-motion: reduce) {
+            .reveal { opacity: 1; transform: none; transition: none; }
+            .book-cover *, .scroll-smooth, .livre-3d { transition: none !important; scroll-behavior: auto !important; }
+            .group:hover .livre-3d.anime, .livre-3d.anime:hover { transform: none; }
+        }
+
         @media (max-width: 768px) {
             .navbar { padding: 0 20px; }
             .nav-links, .nav-actions { display: none; }
@@ -308,9 +399,12 @@
         <!-- Actions -->
         <div class="nav-actions">
             @auth
-                <span style="font-family:'Poppins',sans-serif; font-size:12.5px; color:#4a4a45;">
+                @if(auth()->user()->is_admin)
+                    <a href="{{ route('admin.dashboard') }}" class="btn-ghost">Administration</a>
+                @endif
+                <a href="{{ route('dashboard') }}" class="btn-ghost">
                     {{ auth()->user()->name }}
-                </span>
+                </a>
                 <form method="POST" action="{{ route('logout') }}" style="margin:0;">
                     @csrf
                     <button type="submit" class="btn-danger">
@@ -387,6 +481,11 @@
                 <p class="footer-col-title">Mon compte</p>
                 <ul class="footer-links">
                     @auth
+                        <li><a href="{{ route('dashboard') }}">Mon espace</a></li>
+                        <li><a href="{{ route('espace.bibliotheque') }}">Ma bibliothèque</a></li>
+                        @if(auth()->user()->is_admin)
+                            <li><a href="{{ route('admin.dashboard') }}">Administration</a></li>
+                        @endif
                         <li><a href="{{ route('logout') }}"
                                onclick="event.preventDefault(); document.getElementById('footer-logout').submit();">
                             Déconnexion
@@ -410,6 +509,46 @@
     </footer>
 
     <script>
+    // Carrousels (flèches précédent / suivant) et apparition douce des sections.
+    // Rappelable sur un fragment de page remplacé dynamiquement : window.initUi(element)
+    window.initUi = function (root) {
+        root = root || document;
+
+        root.querySelectorAll('[data-carousel]').forEach(function (carousel) {
+            const track = carousel.querySelector('[data-track]');
+            const prev = carousel.querySelector('[data-prev]');
+            const next = carousel.querySelector('[data-next]');
+            if (!track || !prev || !next) return;
+
+            function update() {
+                prev.disabled = track.scrollLeft <= 4;
+                next.disabled = track.scrollLeft + track.clientWidth >= track.scrollWidth - 4;
+            }
+
+            prev.addEventListener('click', () => track.scrollBy({ left: -track.clientWidth * 0.85 }));
+            next.addEventListener('click', () => track.scrollBy({ left: track.clientWidth * 0.85 }));
+            track.addEventListener('scroll', update, { passive: true });
+            window.addEventListener('resize', update);
+            update();
+        });
+
+        const reveals = root.querySelectorAll('.reveal:not(.is-visible)');
+        if (!('IntersectionObserver' in window)) {
+            reveals.forEach(el => el.classList.add('is-visible'));
+            return;
+        }
+        const observer = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { rootMargin: '0px 0px -60px 0px' });
+        reveals.forEach(el => observer.observe(el));
+    };
+    document.addEventListener('DOMContentLoaded', () => window.initUi());
+
     function toggleMenu(btn) {
         const links = document.querySelector('.nav-links');
         const actions = document.querySelector('.nav-actions');

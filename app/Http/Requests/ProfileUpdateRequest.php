@@ -18,6 +18,16 @@ class ProfileUpdateRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique(User::class)->ignore($this->user()->id)],
+            'telephone' => ['nullable', 'string', 'max:30', 'regex:/^[0-9+().\s-]{6,30}$/'],
+            'bio' => ['nullable', 'string', 'max:1000'],
+            'avatar' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'telephone.regex' => 'Le numéro de téléphone ne peut contenir que des chiffres, espaces et les signes + ( ) . -',
         ];
     }
 }

@@ -19,6 +19,8 @@ class Livre extends Model
         'auteur_id',
         'description',
         'date_publication',
+        'langue',
+        'nombre_pages',
         'image',
         'pdf_path',
         'disponible',
@@ -48,9 +50,61 @@ class Livre extends Model
         return $this->hasMany(\App\Models\Lecture::class);
     }
 
+    /**
+     * Livres les plus lus (toutes périodes confondues).
+     */
+    public function scopePopular($query)
+    {
+        return $query->withCount('lectures')
+            ->orderByDesc('lectures_count')
+            ->latest();
+    }
+
+    /**
+     * Livres lus récemment, du plus lu au moins lu sur la période.
+     */
+    public function scopeTrending($query, int $days = 30)
+    {
+        $recent = fn ($q) => $q->where('read_at', '>=', now()->subDays($days));
+
+        return $query->whereHas('lectures', $recent)
+            ->withCount(['lectures as recent_lectures_count' => $recent])
+            ->orderByDesc('recent_lectures_count');
+    }
+
+    /**
+     * Livres non encore lus, dans les catégories que l'utilisateur lit déjà.
+     */
+    public function scopeRecommandesPour($query, User $user)
+    {
+        $categoriesLues = $user->livres()->whereNotNull('categorie_id')->pluck('categorie_id')->unique();
+
+        return $query->whereIn('categorie_id', $categoriesLues)
+            ->whereDoesntHave('lectures', fn ($q) => $q->where('user_id', $user->id))
+            ->popular();
+    }
+
     public function readers()
     {
         return $this->belongsToMany(\App\Models\User::class, 'lectures')->withPivot('read_at')->withTimestamps();
+    }
+
+    public function notes()
+    {
+        return $this->hasMany(\App\Models\Note::class);
+    }
+
+    /**
+     * Ajoute la note moyenne (notes_avg_note) et le nombre de notes (notes_count).
+     */
+    public function scopeAvecNotes($query)
+    {
+        return $query->withAvg('notes', 'note')->withCount('notes');
+    }
+
+    public function favorisPar()
+    {
+        return $this->belongsToMany(\App\Models\User::class, 'favoris')->withTimestamps();
     }
 }
 

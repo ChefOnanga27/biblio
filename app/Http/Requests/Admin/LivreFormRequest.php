@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class LivreFormRequest extends FormRequest
 {
@@ -22,14 +23,19 @@ class LivreFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
-                'image' => 'string|image|max:2048',
-                'titre' => 'required|string|max:255',
-                'auteur' => 'required|string|max:255',
-                'isbn' => 'required|string|max:255|unique:livres,isbn,'.($this->livre ? $this->livre->id : 'null'),
-                'description' => 'nullable|string',
-                'date_publication' => 'nullable|date',
-                'disponible' => 'boolean',  
+            'titre' => 'required|string|max:255',
+            'auteur' => 'required|string|max:255',
+            'isbn' => ['required', 'string', 'max:50', Rule::unique('livres', 'isbn')->ignore($this->route('livre'))],
+            'description' => 'nullable|string',
+            'date_publication' => 'nullable|date',
+            'langue' => 'nullable|string|max:50',
+            'nombre_pages' => 'nullable|integer|min:1|max:100000',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120|dimensions:min_width=200,min_height=300',
+            'supprimer_image' => 'nullable|boolean',
+            'pdf' => 'nullable|mimes:pdf|max:512000',
+            'categorie_id' => 'required|exists:categories,id',
+            'genre_id' => 'nullable|exists:genres,id',
+            'disponible' => 'boolean',
         ];
     }
 }

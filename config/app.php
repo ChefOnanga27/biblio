@@ -17,6 +17,9 @@ return [
 
     'name' => env('APP_NAME', 'Laravel'),
 
+    // Nom affiché sur le site (logo, titres d'onglet, emails)
+    'site_nom' => env('SITE_NOM', 'Biblio'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Environment
@@ -82,7 +85,7 @@ return [
     |
     */
 
-    'locale' => 'en',
+    'locale' => 'fr',
 
     /*
     |--------------------------------------------------------------------------
@@ -108,7 +111,7 @@ return [
     |
     */
 
-    'faker_locale' => 'en_US',
+    'faker_locale' => 'fr_FR',
 
     /*
     |--------------------------------------------------------------------------

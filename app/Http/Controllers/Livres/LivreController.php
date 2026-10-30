@@ -7,6 +7,7 @@ use App\Models\Livre;
 use App\Models\Categorie;
 use App\Models\Genre;
 use App\Models\Auteur;
+use App\Models\Visitor;
 use Illuminate\Http\Request;
 
 class LivreController extends Controller
@@ -32,11 +33,22 @@ class LivreController extends Controller
         }
 
         if ($request->filled('annee')) {
-            $query->whereYear('annee_publication', $request->annee);
+            $query->whereYear('date_publication', $request->annee);
         }
 
         // 👇 seulement 4 livres pour la page d'accueil
         $livres = $query->latest()->take(4)->get();
+
+        // Enregistrement des visiteurs (par IP/date)
+        Visitor::firstOrCreate(
+            [
+                'ip' => $request->ip(),
+                'visited_at' => now()->toDateString(),
+            ],
+            [
+                'user_agent' => mb_substr((string) $request->userAgent(), 0, 255),
+            ]
+        );
 
         return view('home', compact('livres'));
     }

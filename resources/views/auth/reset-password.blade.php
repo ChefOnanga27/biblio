@@ -1,39 +1,32 @@
-<x-guest-layout>
-    <form method="POST" action="{{ route('password.store') }}">
-        @csrf
+@extends('layouts.auth')
 
-        <!-- Password Reset Token -->
-        <input type="hidden" name="token" value="{{ $request->route('token') }}">
+@section('title', 'Nouveau mot de passe — ' . $siteNom)
+@section('auth-title', 'Nouveau mot de passe')
+@section('auth-subtitle', 'Choisissez un nouveau mot de passe pour votre compte.')
 
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email', $request->email)" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
+@section('auth')
+<form method="POST" action="{{ route('password.store') }}" class="space-y-5">
+    @csrf
+    <input type="hidden" name="token" value="{{ $request->route('token') }}">
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
-            <x-text-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="new-password" />
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
+    <div>
+        <label for="email" class="champ-label">Email</label>
+        <input id="email" type="email" name="email" value="{{ old('email', $request->email) }}" required autofocus autocomplete="username" class="champ">
+        @include('partials.erreur', ['champ' => 'email'])
+    </div>
 
-        <!-- Confirm Password -->
-        <div class="mt-4">
-            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
+    <div>
+        <label for="password" class="champ-label">Nouveau mot de passe</label>
+        @include('partials.champ-mot-de-passe', ['nom' => 'password', 'id' => 'password', 'autocomplete' => 'new-password'])
+        @include('partials.erreur', ['champ' => 'password'])
+    </div>
 
-            <x-text-input id="password_confirmation" class="block mt-1 w-full"
-                                type="password"
-                                name="password_confirmation" required autocomplete="new-password" />
+    <div>
+        <label for="password_confirmation" class="champ-label">Confirmer le mot de passe</label>
+        @include('partials.champ-mot-de-passe', ['nom' => 'password_confirmation', 'id' => 'password_confirmation', 'autocomplete' => 'new-password', 'placeholder' => 'Le même mot de passe'])
+        @include('partials.erreur', ['champ' => 'password_confirmation'])
+    </div>
 
-            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
-            <x-primary-button>
-                {{ __('Reset Password') }}
-            </x-primary-button>
-        </div>
-    </form>
-</x-guest-layout>
+    <button type="submit" class="btn btn-blanc w-full !py-4 !mt-8">Enregistrer le mot de passe</button>
+</form>
+@endsection

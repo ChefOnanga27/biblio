@@ -27,10 +27,10 @@
         outline: none;
         transition: border-color 0.15s, background 0.15s;
         box-sizing: border-box;
-        font-family: 'Poppins', sans-serif;
+        font-family: 'IBM Plex Sans', sans-serif;
     }
     .form-input:focus {
-        border-color: #f97316;
+        border-color: #e0603f;
         background: white;
     }
     .form-input::placeholder { color: #d1d5db; }
@@ -49,16 +49,16 @@
         transition: border-color 0.15s, background 0.15s;
         position: relative;
     }
-    .upload-zone:hover { border-color: #f97316; background: #fff7ed; }
+    .upload-zone:hover { border-color: #e0603f; background: #fdf0ec; }
     .upload-zone input[type="file"] {
         position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
     }
 
     .section-title {
-        font-family: 'Poppins', sans-serif;
+        font-family: 'IBM Plex Sans', sans-serif;
         font-size: 13px;
         font-weight: 700;
-        color: #0C1F1F;
+        color: #121829;
         letter-spacing: 0.02em;
         padding-bottom: 12px;
         border-bottom: 1px solid #f0ede8;
@@ -68,7 +68,7 @@
         gap: 8px;
     }
     .section-title span.dot {
-        width: 6px; height: 6px; border-radius: 50%; background: #f97316; flex-shrink: 0;
+        width: 6px; height: 6px; border-radius: 50%; background: #e0603f; flex-shrink: 0;
     }
 
     .toggle-wrap {
@@ -81,7 +81,7 @@
         border-radius: 10px;
         cursor: pointer;
     }
-    .toggle-wrap:hover { border-color: #f97316; }
+    .toggle-wrap:hover { border-color: #e0603f; }
 
     .toggle {
         width: 40px; height: 22px;
@@ -101,7 +101,7 @@
         transition: transform 0.2s;
         box-shadow: 0 1px 3px rgba(0,0,0,0.15);
     }
-    input#disponible:checked ~ label .toggle { background: #f97316; }
+    input#disponible:checked ~ label .toggle { background: #e0603f; }
     input#disponible:checked ~ label .toggle::after { transform: translateX(18px); }
 
     @error_style: color: #dc2626; font-size: 11.5px; margin-top: 5px;
@@ -165,11 +165,48 @@
                     </div>
 
                     <div class="field-group" style="margin-bottom:0;">
+                        <label for="genre_id" class="form-label">Genre</label>
+                        <select name="genre_id" id="genre_id" class="form-input">
+                            <option value="">— Aucun —</option>
+                            @foreach($genres as $genre)
+                                <option value="{{ $genre->id }}"
+                                    {{ old('genre_id', $livre->genre_id) == $genre->id ? 'selected' : '' }}>
+                                    {{ $genre->nom }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('genre_id')<p style="color:#dc2626;font-size:11.5px;margin-top:5px;">{{ $message }}</p>@enderror
+                    </div>
+
+                    <div class="field-group" style="margin-bottom:0;">
                         <label for="date_publication" class="form-label">Date de publication</label>
                         <input type="date" name="date_publication" id="date_publication"
                                value="{{ old('date_publication', $livre->date_publication ?? '') }}"
                                class="form-input">
                         @error('date_publication')<p style="color:#dc2626;font-size:11.5px;margin-top:5px;">{{ $message }}</p>@enderror
+                    </div>
+
+                    <div class="field-group" style="margin-bottom:0;">
+                        <label for="langue" class="form-label">Langue</label>
+                        <input type="text" name="langue" id="langue" list="langues-connues"
+                               value="{{ old('langue', $livre->langue) }}"
+                               placeholder="Ex : Français"
+                               class="form-input">
+                        <datalist id="langues-connues">
+                            @foreach(['Français', 'Anglais', 'Fang', 'Myènè', 'Punu', 'Nzebi', 'Téké'] as $langue)
+                                <option value="{{ $langue }}">
+                            @endforeach
+                        </datalist>
+                        @error('langue')<p style="color:#dc2626;font-size:11.5px;margin-top:5px;">{{ $message }}</p>@enderror
+                    </div>
+
+                    <div class="field-group" style="margin-bottom:0;">
+                        <label for="nombre_pages" class="form-label">Nombre de pages</label>
+                        <input type="number" name="nombre_pages" id="nombre_pages" min="1"
+                               value="{{ old('nombre_pages', $livre->nombre_pages) }}"
+                               placeholder="Ex : 240"
+                               class="form-input">
+                        @error('nombre_pages')<p style="color:#dc2626;font-size:11.5px;margin-top:5px;">{{ $message }}</p>@enderror
                     </div>
                 </div>
 
@@ -202,12 +239,12 @@
                 @if($livre->pdf_path)
                 <div style="display:flex; align-items:center; gap:10px; margin-top:12px;
                             padding:12px 14px; background:#f5f3ef; border-radius:10px;">
-                    <svg width="16" height="16" fill="none" stroke="#f97316" stroke-width="1.7" viewBox="0 0 24 24">
+                    <svg width="16" height="16" fill="none" stroke="#e0603f" stroke-width="1.7" viewBox="0 0 24 24">
                         <path d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/>
                     </svg>
                     <span style="font-size:12.5px; color:#374151; flex:1;">Fichier PDF actuel</span>
                     <a href="{{ asset('storage/' . $livre->pdf_path) }}" target="_blank"
-                       style="font-size:12px; color:#f97316; text-decoration:none; font-weight:500;">
+                       style="font-size:12px; color:#e0603f; text-decoration:none; font-weight:500;">
                         Voir le fichier →
                     </a>
                 </div>
@@ -245,10 +282,18 @@
                     <input type="file" name="image" id="image" accept="image/*"
                            onchange="previewImage(this)">
                     <p style="font-size:12.5px; color:#6b7280;">Changer l'image</p>
-                    <p style="font-size:11px; color:#9ca3af; margin-top:2px;">JPG, PNG, WebP</p>
+                    <p style="font-size:11px; color:#9ca3af; margin-top:2px;">JPG, PNG ou WebP · 5 Mo max. · 200×300 px min.</p>
+                    <p style="font-size:11px; color:#9ca3af; margin-top:2px;">Redimensionnée et optimisée automatiquement</p>
                 </div>
 
                 @error('image')<p style="color:#dc2626;font-size:11.5px;margin-top:8px;">{{ $message }}</p>@enderror
+
+                @if($livre->image)
+                    <label style="display:flex; align-items:center; gap:8px; margin-top:12px; font-size:12.5px; color:#6b7280; cursor:pointer;">
+                        <input type="checkbox" name="supprimer_image" value="1" style="accent-color:#e0603f;">
+                        Supprimer la couverture actuelle
+                    </label>
+                @endif
             </div>
 
             {{-- Disponibilité --}}
@@ -260,14 +305,14 @@
                               padding:14px 16px; background:#fafaf9; border:1px solid #e5e7eb;
                               border-radius:10px; transition:border-color 0.15s;"
                        id="toggle-label"
-                       onmouseover="this.style.borderColor='#f97316'"
-                       onmouseout="this.style.borderColor=document.getElementById('disponible').checked?'#f97316':'#e5e7eb'">
+                       onmouseover="this.style.borderColor='#e0603f'"
+                       onmouseout="this.style.borderColor=document.getElementById('disponible').checked?'#e0603f':'#e5e7eb'">
                     <input type="checkbox" name="disponible" id="disponible" value="1"
                            {{ old('disponible', $livre->disponible ?? false) ? 'checked' : '' }}
                            style="display:none;"
                            onchange="updateToggle(this)">
                     <div id="toggle-pill" style="width:40px; height:22px; border-radius:20px;
-                                                  background:{{ old('disponible', $livre->disponible ?? false) ? '#f97316' : '#e5e7eb' }};
+                                                  background:{{ old('disponible', $livre->disponible ?? false) ? '#e0603f' : '#e5e7eb' }};
                                                   position:relative; flex-shrink:0; transition:background 0.2s;">
                         <span id="toggle-knob" style="width:16px; height:16px; background:white; border-radius:50%;
                                                        position:absolute; top:3px;
@@ -288,13 +333,13 @@
                 <p class="section-title"><span class="dot"></span> Actions</p>
 
                 <button type="submit"
-                        style="width:100%; padding:12px; background:#0C1F1F; color:white; border:none;
+                        style="width:100%; padding:12px; background:#121829; color:white; border:none;
                                border-radius:10px; font-size:13.5px; font-weight:600; cursor:pointer;
-                               font-family:'Poppins',sans-serif; letter-spacing:0.01em;
+                               font-family:'IBM Plex Sans',sans-serif; letter-spacing:0.01em;
                                transition:background 0.15s; display:flex; align-items:center;
                                justify-content:center; gap:8px; margin-bottom:10px;"
-                        onmouseover="this.style.background='#f97316'"
-                        onmouseout="this.style.background='#0C1F1F'">
+                        onmouseover="this.style.background='#e0603f'"
+                        onmouseout="this.style.background='#121829'">
                     <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
                         <path d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
@@ -350,10 +395,10 @@ function updateToggle(checkbox) {
     const text = document.getElementById('toggle-text');
     const label = document.getElementById('toggle-label');
     if (checkbox.checked) {
-        pill.style.background = '#f97316';
+        pill.style.background = '#e0603f';
         knob.style.left = '21px';
         text.textContent = 'Disponible';
-        label.style.borderColor = '#f97316';
+        label.style.borderColor = '#e0603f';
     } else {
         pill.style.background = '#e5e7eb';
         knob.style.left = '3px';

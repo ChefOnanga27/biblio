@@ -34,7 +34,7 @@ class ProfileTest extends TestCase
 
         $response
             ->assertSessionHasNoErrors()
-            ->assertRedirect('/profile');
+            ->assertRedirect(route('verification.notice'));
 
         $user->refresh();
 

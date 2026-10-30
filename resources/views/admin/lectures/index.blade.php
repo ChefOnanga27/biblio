@@ -14,12 +14,12 @@
         border-radius: 9px;
         outline: none;
         width: 220px;
-        font-family: 'Poppins', sans-serif;
+        font-family: 'IBM Plex Sans', sans-serif;
         color: #374151;
         transition: border-color 0.15s;
         background: white;
     }
-    .search-input:focus { border-color: #f97316; }
+    .search-input:focus { border-color: #e0603f; }
     .table-row { transition: background 0.1s; }
     .table-row:hover { background: #fafaf9; }
 </style>
@@ -78,9 +78,9 @@
                 {{-- Lecteur --}}
                 <td style="padding:14px 16px;">
                     <div style="display:flex; align-items:center; gap:10px;">
-                        <div style="width:32px; height:32px; border-radius:8px; background:#fff7ed;
+                        <div style="width:32px; height:32px; border-radius:8px; background:#fdf0ec;
                                     display:flex; align-items:center; justify-content:center;
-                                    font-size:12px; font-weight:700; color:#f97316; flex-shrink:0;">
+                                    font-size:12px; font-weight:700; color:#e0603f; flex-shrink:0;">
                             {{ strtoupper(substr($lecture->user->name, 0, 1)) }}
                         </div>
                         <div>
@@ -97,7 +97,7 @@
                 {{-- Livre --}}
                 <td style="padding:14px 16px; max-width:200px;">
                     <div style="display:flex; align-items:center; gap:8px;">
-                        <div style="width:6px; height:6px; border-radius:50%; background:#f97316;
+                        <div style="width:6px; height:6px; border-radius:50%; background:#e0603f;
                                     flex-shrink:0; opacity:0.5;"></div>
                         <p style="font-size:13px; font-weight:500; color:#374151;
                                   white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:180px;">
@@ -118,7 +118,7 @@
                 <td style="padding:14px 20px; text-align:center;">
                     @if($lecture->livre->pages)
                         <span style="display:inline-flex; align-items:center; gap:4px;
-                                     font-size:12px; font-weight:600; color:#0C1F1F;
+                                     font-size:12px; font-weight:600; color:#121829;
                                      background:#f5f3ef; padding:4px 10px; border-radius:20px;">
                             {{ $lecture->livre->pages }}
                             <span style="font-size:10px; font-weight:400; color:#9ca3af;">p.</span>
@@ -168,7 +168,7 @@
                style="display:inline-flex; align-items:center; justify-content:center;
                       width:34px; height:34px; border-radius:8px; border:1px solid #e5e7eb;
                       background:white; color:#6b7280; text-decoration:none; transition:all 0.15s;"
-               onmouseover="this.style.borderColor='#f97316';this.style.color='#f97316'"
+               onmouseover="this.style.borderColor='#e0603f';this.style.color='#e0603f'"
                onmouseout="this.style.borderColor='#e5e7eb';this.style.color='#6b7280'">
                 <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24">
                     <path d="M15.75 19.5L8.25 12l7.5-7.5"/>
@@ -180,7 +180,7 @@
             @if($page == $lectures->currentPage())
                 <span style="display:inline-flex; align-items:center; justify-content:center;
                              width:34px; height:34px; border-radius:8px;
-                             background:#0C1F1F; color:white; font-size:13px; font-weight:600;">
+                             background:#121829; color:white; font-size:13px; font-weight:600;">
                     {{ $page }}
                 </span>
             @else
@@ -189,7 +189,7 @@
                           width:34px; height:34px; border-radius:8px; border:1px solid #e5e7eb;
                           background:white; color:#6b7280; font-size:13px; text-decoration:none;
                           transition:all 0.15s;"
-                   onmouseover="this.style.borderColor='#f97316';this.style.color='#f97316'"
+                   onmouseover="this.style.borderColor='#e0603f';this.style.color='#e0603f'"
                    onmouseout="this.style.borderColor='#e5e7eb';this.style.color='#6b7280'">
                     {{ $page }}
                 </a>
@@ -201,7 +201,7 @@
                style="display:inline-flex; align-items:center; justify-content:center;
                       width:34px; height:34px; border-radius:8px; border:1px solid #e5e7eb;
                       background:white; color:#6b7280; text-decoration:none; transition:all 0.15s;"
-               onmouseover="this.style.borderColor='#f97316';this.style.color='#f97316'"
+               onmouseover="this.style.borderColor='#e0603f';this.style.color='#e0603f'"
                onmouseout="this.style.borderColor='#e5e7eb';this.style.color='#6b7280'">
                 <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24">
                     <path d="M8.25 4.5l7.5 7.5-7.5 7.5"/>

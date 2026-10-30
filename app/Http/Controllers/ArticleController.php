@@ -13,10 +13,8 @@ class ArticleController extends Controller
         return view('article.index', compact('articles'));
     }
 
-    public function show($slug)
+    public function show(Article $article)
     {
-        $article = Article::where('slug', $slug)->firstOrFail();
-
         // Vérifier que l'article est publié
         if (! $article->published_at || $article->published_at > now()) {
             abort(404);
