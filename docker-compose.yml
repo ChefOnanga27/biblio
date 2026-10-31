@@ -1,9 +1,13 @@
-# Lancement complet : application + MySQL + Mailpit (boîte mail de test)
+# Lancement de l'application avec Supabase (base PostgreSQL + Storage) :
 #   docker compose up -d --build
 #   Site     : http://localhost:8000
-#   Emails   : http://localhost:8025  (codes de vérification, mots de passe oubliés)
+#   Emails   : http://localhost:8025  (Mailpit, boîte mail de test)
 #
-# Les variables viennent de .env ; celles ci-dessous remplacent les valeurs « locales ».
+# La base et les fichiers sont ceux de Supabase : renseignez dans .env
+# DB_CONNECTION=supabase, MEDIA_DISK=supabase et les variables SUPABASE_* (voir .env.example).
+#
+# Pour tester avec une base MySQL locale à la place : docker compose --profile mysql up -d
+# (et DB_CONNECTION=mysql, DB_HOST=db dans .env).
 
 services:
   app:
@@ -14,8 +18,7 @@ services:
       APP_ENV: production
       APP_DEBUG: "false"
       APP_URL: http://localhost:8000
-      DB_HOST: db
-      DB_PORT: 3306
+      # Emails de test envoyés à Mailpit ; en production, configurez un vrai serveur SMTP dans .env
       MAIL_MAILER: smtp
       MAIL_HOST: mailpit
       MAIL_PORT: 1025
@@ -23,13 +26,18 @@ services:
     ports:
       - "8000:80"
     volumes:
+      # Utile seulement si MEDIA_DISK=public (fichiers stockés dans le conteneur)
       - storage:/var/www/html/storage/app
-    depends_on:
-      db:
-        condition: service_healthy
+    restart: unless-stopped
+
+  mailpit:
+    image: axllent/mailpit:latest
+    ports:
+      - "8025:8025"
     restart: unless-stopped
 
   db:
+    profiles: ["mysql"]
     image: mysql:8.0
     environment:
       MYSQL_DATABASE: ${DB_DATABASE}
@@ -38,17 +46,6 @@ services:
       MYSQL_RANDOM_ROOT_PASSWORD: "yes"
     volumes:
       - mysql:/var/lib/mysql
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-      interval: 5s
-      timeout: 5s
-      retries: 20
-    restart: unless-stopped
-
-  mailpit:
-    image: axllent/mailpit:latest
-    ports:
-      - "8025:8025"
     restart: unless-stopped
 
 volumes:

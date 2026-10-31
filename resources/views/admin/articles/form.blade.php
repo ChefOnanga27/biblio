@@ -150,7 +150,7 @@
                             background:#f5f3ef; margin-bottom:14px;">
                     @if($article->image)
                         <img id="cover-preview"
-                             src="{{ asset('storage/' . $article->image) }}"
+                             src="{{ media_url($article->image) }}"
                              style="width:100%; height:100%; object-fit:cover;">
                     @else
                         <div id="cover-placeholder" style="width:100%; height:100%; display:flex;

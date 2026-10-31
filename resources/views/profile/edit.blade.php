@@ -40,7 +40,7 @@
                             <span class="relative w-28 h-28 rounded-full overflow-hidden bg-surface-2 ring-4 ring-white/5 shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex items-center justify-center">
                                 <template x-if="apercu"><img :src="apercu" alt="" class="w-full h-full object-cover"></template>
                                 @if($user->avatar)
-                                    <img x-show="! apercu" src="{{ asset('storage/' . $user->avatar) }}" alt="Votre photo de profil" class="w-full h-full object-cover">
+                                    <img x-show="! apercu" src="{{ media_url($user->avatar) }}" alt="Votre photo de profil" class="w-full h-full object-cover">
                                 @else
                                     <span x-show="! apercu" class="text-[30px] font-semibold text-corail">{{ $initiales }}</span>
                                 @endif
@@ -153,7 +153,7 @@
                 <div class="flex gap-4 p-5">
                     <span class="flex-none w-[86px] h-[104px] rounded-md overflow-hidden bg-white/10 flex items-center justify-center">
                         @if($user->avatar)
-                            <img src="{{ asset('storage/' . $user->avatar) }}" alt="" class="w-full h-full object-cover">
+                            <img src="{{ media_url($user->avatar) }}" alt="" class="w-full h-full object-cover">
                         @else
                             <span class="text-[26px] font-semibold text-corail">{{ $initiales }}</span>
                         @endif

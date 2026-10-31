@@ -12,7 +12,9 @@ class TrustProxies extends Middleware
      *
      * @var array<int, string>|string|null
      */
-    protected $proxies;
+    // Hébergeurs comme Render : le HTTPS est terminé par leur proxy, devant le conteneur.
+    // Sans cela, Laravel générerait des liens http:// bloqués sur une page https://.
+    protected $proxies = '*';
 
     /**
      * The headers that should be used to detect proxies.

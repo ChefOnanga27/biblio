@@ -19,7 +19,7 @@
        class="group mt-8 grid md:grid-cols-2 rounded-[14px] overflow-hidden border border-ligne bg-surface/60 hover:border-corail/40 transition-colors">
         <div class="relative min-h-[220px] bg-surface-2 overflow-hidden">
             @if($vedette->image)
-                <img src="{{ asset('storage/' . $vedette->image) }}" alt="" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                <img src="{{ media_url($vedette->image) }}" alt="" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
             @endif
             <span class="absolute top-4 left-4 text-[11px] font-semibold uppercase tracking-wide bg-corail text-white px-3 py-1 rounded-full">À la une</span>
         </div>
@@ -39,7 +39,7 @@
             <a href="{{ route('articles.show', $article) }}" class="group rounded-[12px] overflow-hidden border border-ligne bg-surface/60 hover:border-corail/40 transition-colors flex flex-col">
                 <div class="aspect-[16/9] bg-surface-2 overflow-hidden">
                     @if($article->image)
-                        <img src="{{ asset('storage/' . $article->image) }}" alt="" loading="lazy" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                        <img src="{{ media_url($article->image) }}" alt="" loading="lazy" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
                     @endif
                 </div>
                 <div class="p-5 flex-1 flex flex-col">

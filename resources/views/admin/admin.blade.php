@@ -85,7 +85,7 @@
         <div style="padding: 14px; border-top: 1px solid rgba(255,255,255,0.06);">
             <div style="display:flex; align-items:center; gap:10px; padding:8px 10px; border-radius:10px; background:rgba(255,255,255,0.04);">
                 @if($admin->avatar)
-                    <img src="{{ asset('storage/' . $admin->avatar) }}" alt="" style="width:32px; height:32px; border-radius:50%; object-fit:cover;">
+                    <img src="{{ media_url($admin->avatar) }}" alt="" style="width:32px; height:32px; border-radius:50%; object-fit:cover;">
                 @else
                     <span style="width:32px; height:32px; border-radius:50%; background:rgba(240,113,85,.2); color:#ff9a85; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; flex:none;">
                         {{ mb_strtoupper(mb_substr($admin->name, 0, 1)) }}

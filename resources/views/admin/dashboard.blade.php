@@ -139,7 +139,7 @@
             <div style="display:flex; align-items:center; gap:12px; padding:10px 0; border-bottom:1px solid #f1f2f6;">
                 <span style="width:22px; font-size:13px; font-weight:600; color:#9ca3af;">{{ $loop->iteration }}</span>
                 <span style="width:34px; height:50px; border-radius:4px; overflow:hidden; background:#e5e7eb; flex:none;">
-                    @if($livre->image)<img src="{{ asset('storage/' . $livre->image) }}" alt="" style="width:100%; height:100%; object-fit:cover;">@endif
+                    @if($livre->image)<img src="{{ media_url($livre->image) }}" alt="" style="width:100%; height:100%; object-fit:cover;">@endif
                 </span>
                 <div style="min-width:0; flex:1;">
                     <a href="{{ route('admin.livres.edit', $livre) }}" style="display:block; font-size:13.5px; font-weight:500; color:#121829; text-decoration:none; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ $livre->titre }}</a>
@@ -174,7 +174,7 @@
         @foreach($derniersInscrits as $user)
             <div style="display:flex; align-items:center; gap:10px; padding:9px 0; border-bottom:1px solid #f1f2f6;">
                 @if($user->avatar)
-                    <img src="{{ asset('storage/' . $user->avatar) }}" alt="" style="width:32px; height:32px; border-radius:50%; object-fit:cover;">
+                    <img src="{{ media_url($user->avatar) }}" alt="" style="width:32px; height:32px; border-radius:50%; object-fit:cover;">
                 @else
                     <span style="width:32px; height:32px; border-radius:50%; background:#fdf0ec; color:#c94f31; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:600; flex:none;">{{ mb_strtoupper(mb_substr($user->name, 0, 1)) }}</span>
                 @endif

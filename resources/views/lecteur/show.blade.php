@@ -59,7 +59,7 @@
             <div class="mt-5 flex gap-3.5">
                 <div class="flex-none w-[60px] aspect-[2/3] rounded-lg overflow-hidden bg-[#1a2134] shadow-lg">
                     @if($livre->image)
-                        <img src="{{ asset('storage/' . $livre->image) }}" alt="" class="w-full h-full object-cover">
+                        <img src="{{ media_url($livre->image) }}" alt="" class="w-full h-full object-cover">
                     @endif
                 </div>
                 <div class="min-w-0">
@@ -142,7 +142,7 @@
             </div>
             <div id="erreur" class="hidden absolute inset-0 flex flex-col items-center justify-center gap-3 text-center px-6">
                 <p class="text-[15px] font-semibold">Impossible d'ouvrir ce livre.</p>
-                <a href="{{ asset('storage/' . $livre->pdf_path) }}" target="_blank" rel="noopener"
+                <a href="{{ media_url($livre->pdf_path) }}" target="_blank" rel="noopener"
                    class="text-[13px] font-semibold text-[#f07155] hover:underline">Ouvrir le PDF dans un nouvel onglet</a>
             </div>
         </div>
@@ -188,7 +188,7 @@
 <script>
 (function () {
     const CONFIG = {
-        pdf: @json(asset('storage/' . $livre->pdf_path)),
+        pdf: @json(media_url($livre->pdf_path)),
         progression: @json(route('livres.progression', $livre)),
         signets: @json(route('livres.signets', $livre)),
         csrf: @json(csrf_token()),

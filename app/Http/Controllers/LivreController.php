@@ -26,10 +26,11 @@ class LivreController extends Controller
         $recherche = trim((string) $request->input('search'));
         if ($recherche !== '') {
             $like = '%' . $recherche . '%';
-            $query->where(fn ($q) => $q->where('titre', 'like', $like)
-                ->orWhere('auteur', 'like', $like)
-                ->orWhere('isbn', 'like', $like)
-                ->orWhere('description', 'like', $like));
+            // whereLike ignore la casse sur toutes les bases (ILIKE sous PostgreSQL)
+            $query->where(fn ($q) => $q->whereLike('titre', $like)
+                ->orWhereLike('auteur', $like)
+                ->orWhereLike('isbn', $like)
+                ->orWhereLike('description', $like));
         }
 
         // 📂 Filtre catégorie
@@ -63,11 +64,13 @@ class LivreController extends Controller
         match ($tri) {
             'pertinence' => $recherche !== ''
                 // Les titres qui commencent par la recherche d'abord, puis les plus lus
-                ? $query->orderByRaw('CASE WHEN titre LIKE ? THEN 0 ELSE 1 END', [$recherche . '%'])
+                ? $query->orderByRaw('CASE WHEN LOWER(titre) LIKE ? THEN 0 ELSE 1 END', [mb_strtolower($recherche) . '%'])
                         ->orderByDesc('lectures_count')
                 : $query->orderByDesc('lectures_count')->latest(),
             'populaires' => $query->orderByDesc('lectures_count')->latest(),
-            'notes' => $query->orderByDesc('notes_avg_note')->orderByDesc('notes_count'),
+            // Les livres sans note en dernier (PostgreSQL place les NULL en tête d'un tri décroissant)
+            'notes' => $query->orderByRaw('NOT EXISTS (SELECT 1 FROM notes WHERE notes.livre_id = livres.id)')
+                ->orderByDesc('notes_avg_note')->orderByDesc('notes_count'),
             'titre' => $query->orderBy('titre'),
             default => $query->latest(),
         };

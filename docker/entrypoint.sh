@@ -8,13 +8,21 @@ cd /var/www/html
 mkdir -p storage/app/public storage/framework/cache storage/framework/sessions storage/framework/views storage/logs
 chown -R www-data:www-data storage bootstrap/cache
 
+# Port imposé par l'hébergeur (Render fournit $PORT) ; 80 par défaut
+if [ -n "$PORT" ] && [ "$PORT" != "80" ]; then
+    sed -ri "s/^Listen [0-9]+/Listen ${PORT}/" /etc/apache2/ports.conf
+    sed -ri "s/<VirtualHost \*:[0-9]+>/<VirtualHost *:${PORT}>/" /etc/apache2/sites-available/000-default.conf
+fi
+
 if [ -z "$APP_KEY" ]; then
     echo "ERREUR : APP_KEY est vide. Générez-la avec « php artisan key:generate --show » et ajoutez-la à .env." >&2
     exit 1
 fi
 
-# Lien public/storage → storage/app/public (couvertures, PDF, avatars)
-[ -L public/storage ] || php artisan storage:link
+# Lien public/storage → storage/app/public, seulement si les médias restent en local
+if [ "${MEDIA_DISK:-public}" = "public" ] && [ ! -L public/storage ]; then
+    php artisan storage:link
+fi
 
 # Migrations automatiques si RUN_MIGRATIONS=true
 if [ "${RUN_MIGRATIONS:-false}" = "true" ]; then

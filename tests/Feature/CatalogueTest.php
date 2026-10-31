@@ -99,4 +99,24 @@ class CatalogueTest extends TestCase
 
         $this->post("/livres/{$livre->id}/favori")->assertRedirect('/login');
     }
+    public function test_search_ignores_case(): void
+    {
+        $this->livre(['titre' => 'Dune']);
+
+        $this->get('/bibliotheque?search=dUNE')->assertOk()->assertSee('Dune')->assertDontSee('Aucun ouvrage trouvé.');
+    }
+
+    public function test_best_rated_sort_puts_unrated_books_last(): void
+    {
+        $this->livre(['titre' => 'Jamais noté']);
+        $moyen = $this->livre(['titre' => 'Moyen']);
+        $excellent = $this->livre(['titre' => 'Excellent']);
+        $user = User::factory()->create();
+        \App\Models\Note::create(['user_id' => $user->id, 'livre_id' => $moyen->id, 'note' => 3]);
+        \App\Models\Note::create(['user_id' => $user->id, 'livre_id' => $excellent->id, 'note' => 5]);
+
+        $titres = $this->get('/bibliotheque?tri=notes')->viewData('livres')->pluck('titre')->all();
+
+        $this->assertSame(['Excellent', 'Moyen', 'Jamais noté'], $titres);
+    }
 }

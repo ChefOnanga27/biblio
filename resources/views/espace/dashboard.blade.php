@@ -18,7 +18,7 @@
         <a href="{{ route('livres.show', $livre) }}" class="livre-3d block flex-none w-[96px] sm:w-[124px]">
             <span class="livre-3d__couverture block aspect-[2/3] bg-surface-2">
                 @if($livre->image)
-                    <img src="{{ asset('storage/' . $livre->image) }}" alt="{{ $livre->titre }}" class="w-full h-full object-cover">
+                    <img src="{{ media_url($livre->image) }}" alt="{{ $livre->titre }}" class="w-full h-full object-cover">
                 @endif
                 <span class="livre-3d__dos" aria-hidden="true"></span>
             </span>

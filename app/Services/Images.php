@@ -28,7 +28,7 @@ class Images
         [$largeurMax, $hauteurMax, $carre] = self::FORMATS[$format];
 
         if (! self::gdDisponible() || ! ($source = @imagecreatefromstring((string) file_get_contents($fichier->getRealPath())))) {
-            return $fichier->store($dossier, 'public');
+            return $fichier->store($dossier, ['disk' => config('filesystems.medias')]);
         }
 
         $source = self::corrigerOrientation($source, $fichier);
@@ -42,7 +42,7 @@ class Images
         imagedestroy($image);
 
         $chemin = trim($dossier, '/') . '/' . Str::uuid() . '.webp';
-        Storage::disk('public')->put($chemin, $contenu);
+        medias()->put($chemin, $contenu);
 
         return $chemin;
     }
@@ -61,7 +61,7 @@ class Images
     public static function supprimer(?string $chemin): void
     {
         if ($chemin) {
-            Storage::disk('public')->delete($chemin);
+            medias()->delete($chemin);
         }
     }
 

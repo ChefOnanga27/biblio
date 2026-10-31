@@ -78,7 +78,7 @@ class LivreController extends Controller
     public function destroy(Livre $livre)
     {
         $livre->delete();
-        Storage::disk('public')->delete(array_filter([$livre->image, $livre->pdf_path]));
+        medias()->delete(array_filter([$livre->image, $livre->pdf_path]));
 
         return to_route('admin.livres.index')
             ->with('success', 'Livre supprimé avec succès');
@@ -114,9 +114,9 @@ class LivreController extends Controller
 
         if ($request->hasFile('pdf')) {
             if ($livre->pdf_path) {
-                Storage::disk('public')->delete($livre->pdf_path);
+                medias()->delete($livre->pdf_path);
             }
-            $data['pdf_path'] = $request->file('pdf')->store('livres/pdfs', 'public');
+            $data['pdf_path'] = $request->file('pdf')->store('livres/pdfs', ['disk' => config('filesystems.medias')]);
         }
 
         return $data;

@@ -39,7 +39,7 @@
 {{-- ═════════ EN-TÊTE ═════════ --}}
 <section class="relative mt-6 overflow-hidden rounded-[16px] border border-ligne bg-surface/50">
     @if($livre->image)
-        <img src="{{ asset('storage/' . $livre->image) }}" alt="" aria-hidden="true" class="absolute inset-0 w-full h-full object-cover opacity-25 blur-3xl scale-125">
+        <img src="{{ media_url($livre->image) }}" alt="" aria-hidden="true" class="absolute inset-0 w-full h-full object-cover opacity-25 blur-3xl scale-125">
     @endif
     <div class="absolute inset-0 bg-gradient-to-r from-[#070b14]/95 via-[#070b14]/80 to-[#070b14]/60"></div>
 
@@ -48,7 +48,7 @@
             <div class="livre-3d">
                 <div class="livre-3d__couverture aspect-[2/3] bg-surface-2">
                     @if($livre->image)
-                        <img src="{{ asset('storage/' . $livre->image) }}" alt="Couverture de {{ $livre->titre }}" class="w-full h-full object-cover">
+                        <img src="{{ media_url($livre->image) }}" alt="Couverture de {{ $livre->titre }}" class="w-full h-full object-cover">
                     @else
                         <div class="w-full h-full flex flex-col justify-end p-5 pl-[14%] bg-gradient-to-br from-[#2a3350] via-[#1f2740] to-[#151b2d]">
                             <span class="w-8 h-1 rounded-full bg-corail mb-3"></span>

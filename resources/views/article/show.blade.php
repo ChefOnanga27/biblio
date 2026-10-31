@@ -14,7 +14,7 @@
 <div class="mt-6 grid xl:grid-cols-[minmax(0,1fr)_320px] gap-8 items-start">
     <article class="min-w-0 rounded-[14px] overflow-hidden border border-ligne bg-surface/50">
         @if($article->image)
-            <img src="{{ asset('storage/' . $article->image) }}" alt="" class="w-full max-h-[420px] object-cover">
+            <img src="{{ media_url($article->image) }}" alt="" class="w-full max-h-[420px] object-cover">
         @endif
         <div class="p-6 sm:p-10">
             <h1 class="text-[28px] sm:text-[38px] font-semibold leading-[1.15]">{{ $article->titre }}</h1>
@@ -36,7 +36,7 @@
             <a href="{{ route('articles.show', $autre) }}" class="group flex gap-3 py-4 border-b border-ligne last:border-0">
                 <span class="flex-none w-16 h-16 rounded-lg overflow-hidden bg-surface-2">
                     @if($autre->image)
-                        <img src="{{ asset('storage/' . $autre->image) }}" alt="" loading="lazy" class="w-full h-full object-cover">
+                        <img src="{{ media_url($autre->image) }}" alt="" loading="lazy" class="w-full h-full object-cover">
                     @endif
                 </span>
                 <span class="min-w-0">

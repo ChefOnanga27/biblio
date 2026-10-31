@@ -23,7 +23,7 @@
         <a href="{{ route('livres.show', $livre) }}" class="livre-3d anime block group">
             <span class="livre-3d__couverture block aspect-[2/3] bg-surface-2">
                 @if($livre->image)
-                    <img src="{{ asset('storage/' . $livre->image) }}" alt="{{ $livre->titre }}" loading="lazy" class="w-full h-full object-cover">
+                    <img src="{{ media_url($livre->image) }}" alt="{{ $livre->titre }}" loading="lazy" class="w-full h-full object-cover">
                 @else
                     <span class="w-full h-full flex items-end p-2.5 pl-[14%] bg-gradient-to-br from-[#2a3350] to-[#151b2d] text-[12px] font-semibold leading-snug">{{ $livre->titre }}</span>
                 @endif

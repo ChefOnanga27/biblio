@@ -15,11 +15,11 @@ RUN composer dump-autoload --optimize --no-dev --classmap-authoritative
 # ── 2. Serveur ────────────────────────────────────────────────────────────────
 FROM php:8.4-apache
 
-# Extensions : MySQL, GD (redimensionnement + WebP des images), EXIF (orientation des photos), zip, intl, opcache
+# Extensions : PostgreSQL (Supabase) et MySQL, GD (redimensionnement + WebP des images), EXIF (orientation des photos), zip, intl, opcache
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends libpng-dev libjpeg62-turbo-dev libwebp-dev libfreetype6-dev libzip-dev libicu-dev unzip \
+    && apt-get install -y --no-install-recommends libpng-dev libjpeg62-turbo-dev libwebp-dev libfreetype6-dev libzip-dev libicu-dev libpq-dev unzip \
     && docker-php-ext-configure gd --with-jpeg --with-webp --with-freetype \
-    && docker-php-ext-install -j"$(nproc)" pdo_mysql gd exif zip intl bcmath opcache \
+    && docker-php-ext-install -j"$(nproc)" pdo_pgsql pdo_mysql gd exif zip intl bcmath opcache \
     && apt-get purge -y --auto-remove \
     && rm -rf /var/lib/apt/lists/*
 

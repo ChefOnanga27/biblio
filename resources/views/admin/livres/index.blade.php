@@ -127,7 +127,7 @@
                     @if($livre->image)
                         <div style="width:40px; height:54px; border-radius:7px; overflow:hidden;
                                     box-shadow:0 2px 8px rgba(0,0,0,0.1); flex-shrink:0;">
-                            <img src="{{ asset('storage/' . $livre->image) }}"
+                            <img src="{{ media_url($livre->image) }}"
                                  style="width:100%; height:100%; object-fit:cover;">
                         </div>
                     @else

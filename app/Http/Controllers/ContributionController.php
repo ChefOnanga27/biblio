@@ -40,7 +40,7 @@ class ContributionController extends Controller
         Contribution::create([
             ...collect($data)->except(['pdf', 'image', 'droits'])->all(),
             'user_id' => $request->user()->id,
-            'pdf_path' => $request->file('pdf')->store('contributions/pdfs', 'public'),
+            'pdf_path' => $request->file('pdf')->store('contributions/pdfs', ['disk' => config('filesystems.medias')]),
             'image' => $request->hasFile('image') ? Images::enregistrer($request->file('image'), 'contributions/couvertures', 'couverture') : null,
         ]);
 

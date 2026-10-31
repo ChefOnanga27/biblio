@@ -126,7 +126,7 @@
                         <button type="button" @click="ouvert = ! ouvert" :aria-expanded="ouvert" aria-haspopup="menu"
                                 class="pastille pl-1.5 pr-4 gap-3 cursor-pointer hover:border-white/15 transition-colors">
                             @if($user->avatar)
-                                <img src="{{ asset('storage/' . $user->avatar) }}" alt="" class="w-9 h-9 rounded-full object-cover">
+                                <img src="{{ media_url($user->avatar) }}" alt="" class="w-9 h-9 rounded-full object-cover">
                             @else
                                 <span class="w-9 h-9 rounded-full bg-corail/20 text-corail text-[13px] font-semibold flex items-center justify-center">{{ $initiales }}</span>
                             @endif

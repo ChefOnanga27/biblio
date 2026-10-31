@@ -16,6 +16,13 @@ return [
     'default' => env('FILESYSTEM_DISK', 'local'),
 
     /*
+    | Disque des médias du site (couvertures, PDF, avatars, illustrations du blog) :
+    | « public » (storage/app/public, en local) ou « supabase » (Supabase Storage).
+    */
+
+    'medias' => env('MEDIA_DISK', 'public'),
+
+    /*
     |--------------------------------------------------------------------------
     | Filesystem Disks
     |--------------------------------------------------------------------------
@@ -54,6 +61,21 @@ return [
             'endpoint' => env('AWS_ENDPOINT'),
             'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
             'throw' => false,
+        ],
+
+        // Supabase Storage via son API compatible S3 (Dashboard → Storage → S3 Connection).
+        // Le bucket doit être « public » : les fichiers sont servis depuis /storage/v1/object/public/<bucket>/…
+        'supabase' => [
+            'driver' => 's3',
+            'key' => env('SUPABASE_S3_KEY'),
+            'secret' => env('SUPABASE_S3_SECRET'),
+            'region' => env('SUPABASE_S3_REGION', 'eu-west-3'),
+            'bucket' => env('SUPABASE_BUCKET', 'biblio'),
+            'endpoint' => rtrim((string) env('SUPABASE_URL'), '/').'/storage/v1/s3',
+            'url' => rtrim((string) env('SUPABASE_URL'), '/').'/storage/v1/object/public/'.env('SUPABASE_BUCKET', 'biblio'),
+            'use_path_style_endpoint' => true,
+            'visibility' => 'public',
+            'throw' => true,
         ],
 
     ],

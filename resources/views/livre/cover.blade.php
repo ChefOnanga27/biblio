@@ -7,7 +7,7 @@
     <div class="livre-3d anime">
         <div class="livre-3d__couverture aspect-[2/3] bg-surface-2">
             @if($livre->image)
-                <img src="{{ asset('storage/' . $livre->image) }}" alt="{{ $livre->titre }}" loading="lazy"
+                <img src="{{ media_url($livre->image) }}" alt="{{ $livre->titre }}" loading="lazy"
                      class="w-full h-full object-cover">
             @else
                 <div class="w-full h-full flex flex-col justify-end p-3 pl-[14%] bg-gradient-to-br from-[#2a3350] via-[#1f2740] to-[#151b2d]">

@@ -62,7 +62,7 @@ class ContributionController extends Controller
 
         $data = $request->validate(['motif_refus' => 'required|string|max:1000']);
 
-        Storage::disk('public')->delete(array_filter([$contribution->pdf_path, $contribution->image]));
+        medias()->delete(array_filter([$contribution->pdf_path, $contribution->image]));
         $contribution->update(['statut' => 'refusee', 'motif_refus' => $data['motif_refus']]);
 
         return to_route('admin.contributions.index')->with('success', 'Contribution refusée.');
@@ -71,7 +71,7 @@ class ContributionController extends Controller
     private function deplacer(string $chemin, string $dossier): string
     {
         $nouveau = $dossier . '/' . basename($chemin);
-        Storage::disk('public')->move($chemin, $nouveau);
+        medias()->move($chemin, $nouveau);
 
         return $nouveau;
     }

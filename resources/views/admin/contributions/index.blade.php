@@ -47,7 +47,7 @@
 
             <div style="display:flex; flex-direction:column; gap:8px; align-items:flex-end;">
                 @if($contribution->statut !== 'refusee')
-                    <a href="{{ asset('storage/' . $contribution->pdf_path) }}" target="_blank" rel="noopener"
+                    <a href="{{ media_url($contribution->pdf_path) }}" target="_blank" rel="noopener"
                        style="font-size:12.5px; color:#121829; text-decoration:underline;">Ouvrir le PDF</a>
                 @endif
 
