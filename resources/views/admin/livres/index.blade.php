@@ -55,9 +55,9 @@
 </style>
 
 {{-- ── TOPBAR ACTIONS ── --}}
-<div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:22px;">
+<div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; margin-bottom:22px;">
 
-    <div style="display:flex; align-items:center; gap:10px;">
+    <div style="display:flex; align-items:center; flex-wrap:wrap; gap:10px;">
         {{-- Search --}}
         <div style="position:relative;">
             <svg style="position:absolute;left:10px;top:50%;transform:translateY(-50%);pointer-events:none;"
@@ -96,9 +96,9 @@
 </div>
 
 {{-- ── TABLE ── --}}
-<div style="background:white; border-radius:16px; border:1px solid #f0ede8; overflow:hidden;">
+<div style="background:white; border-radius:16px; border:1px solid #f0ede8; overflow-x:auto;">
 
-    <table style="width:100%; border-collapse:collapse;" id="livres-table">
+    <table style="width:100%; min-width:720px; border-collapse:collapse;" id="livres-table">
         <thead>
             <tr style="background:#fafaf9; border-bottom:1px solid #f0ede8;">
                 <th style="padding:12px 20px; font-size:10.5px; font-weight:600; letter-spacing:0.1em;

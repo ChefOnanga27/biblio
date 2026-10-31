@@ -20,7 +20,7 @@
 @endphp
 
 {{-- ═════════ FILTRES ═════════ --}}
-<form id="catalogue-filtres" method="GET" action="{{ route('livre.index') }}" class="no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0 overflow-x-auto">
+<form id="catalogue-filtres" method="GET" action="{{ route('livre.index') }}" class="relative no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0 overflow-x-auto">
     <div class="flex items-center gap-3 w-max sm:w-auto sm:flex-wrap pb-1">
         <div class="relative flex-none">
             <label for="filtre-categorie" class="sr-only">Parcourir par catégorie</label>

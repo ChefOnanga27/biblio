@@ -113,7 +113,7 @@
     @csrf
     @if($livre->exists) @method('PUT') @endif
 
-    <div style="display:grid; grid-template-columns:1fr 340px; gap:20px; align-items:start;">
+    <div style="display:grid; grid-template-columns:minmax(0, 1fr) 340px; gap:20px; align-items:start;" class="max-lg:!grid-cols-1">
 
         {{-- ── COLONNE PRINCIPALE ── --}}
         <div style="display:flex; flex-direction:column; gap:20px;">
@@ -122,7 +122,7 @@
             <div style="background:white; border-radius:16px; border:1px solid #f0ede8; padding:28px;">
                 <p class="section-title"><span class="dot"></span> Informations générales</p>
 
-                <div style="display:grid; grid-template-columns:1fr 1fr; gap:18px;">
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:18px;" class="max-sm:!grid-cols-1">
                     <div class="field-group" style="margin-bottom:0; grid-column:1/-1;">
                         <label for="titre" class="form-label">Titre du livre</label>
                         <input type="text" name="titre" id="titre"

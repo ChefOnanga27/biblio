@@ -88,7 +88,7 @@
     </div>
     @endif
 
-    <div style="display:grid; grid-template-columns:1fr 320px; gap:20px; align-items:start;">
+    <div style="display:grid; grid-template-columns:minmax(0, 1fr) 320px; gap:20px; align-items:start;" class="max-lg:!grid-cols-1">
 
         {{-- ── COLONNE PRINCIPALE ── --}}
         <div style="display:flex; flex-direction:column; gap:20px;">

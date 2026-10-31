@@ -130,7 +130,7 @@
     </section>
 </div>
 
-<div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:20px; margin-top:20px;">
+<div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap:20px; margin-top:20px;">
 
     {{-- ═════════ LES PLUS LUS ═════════ --}}
     <section style="{{ $carte }} padding:22px 24px;">

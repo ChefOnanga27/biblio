@@ -29,6 +29,10 @@
     </style>
 
     <style>
+        /* Ordre des couches de Tailwind : les composants ci-dessous sont dans « components », donc les utilitaires
+           (hidden, sm:inline-flex, !h-12…) l'emportent sur eux, comme prévu par Tailwind. */
+        @layer theme, base, components, utilities;
+
         body {
             margin: 0;
             min-height: 100dvh;
@@ -51,6 +55,7 @@
         [x-cloak] { display: none !important; }
         ::selection { background: rgba(240, 113, 85, 0.35); }
 
+        @layer components {
         /* ── Boutons ── */
         .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; border-radius: 10px;
                padding: 11px 20px; font-size: 14px; font-weight: 600; line-height: 1; cursor: pointer;
@@ -111,6 +116,7 @@
         .livre-3d__pages { position: relative; display: block; margin: -4% 0 0 2%; padding-top: 9%; background: var(--dos); border-radius: 0 0 6px 7px; }
         .livre-3d__pages::before { content: ''; position: absolute; left: 4%; right: 2.5%; top: 0; height: 62%; border-radius: 0 0 2px 2px;
                                    background: repeating-linear-gradient(180deg, #e9edf0 0 1.5px, #b9c3cc 1.5px 3px); }
+        }
 
         @media (prefers-reduced-motion: reduce) {
             .reveal { opacity: 1; transform: none; transition: none; }

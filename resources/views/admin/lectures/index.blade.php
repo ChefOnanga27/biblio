@@ -43,9 +43,9 @@
 </div>
 
 {{-- ── TABLE ── --}}
-<div style="background:white; border-radius:16px; border:1px solid #f0ede8; overflow:hidden; margin-bottom:20px;">
+<div style="background:white; border-radius:16px; border:1px solid #f0ede8; overflow-x:auto; margin-bottom:20px;">
 
-    <table style="width:100%; border-collapse:collapse;" id="lectures-table">
+    <table style="width:100%; min-width:720px; border-collapse:collapse;" id="lectures-table">
         <thead>
             <tr style="background:#fafaf9; border-bottom:1px solid #f0ede8;">
                 <th style="padding:12px 20px; font-size:10.5px; font-weight:600; letter-spacing:0.1em;

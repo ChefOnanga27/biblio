@@ -10,7 +10,7 @@
     ];
 @endphp
 
-<nav aria-label="Espace personnel" class="no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0 overflow-x-auto">
+<nav aria-label="Espace personnel" class="relative no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0 overflow-x-auto">
     <ul class="flex gap-2 w-max">
         @foreach($liens as [$libelle, $url, $actif])
             <li>
