@@ -6,6 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Admin') — {{ $siteNom }}</title>
     <link rel="icon" href="{{ asset('Digital.png') }}">
+    @include('partials.pwa')
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#070b14">
+    <title>Hors connexion — Biblio</title>
+    <link rel="icon" href="/pwa-icons/icon-192.png">
+    <style>
+        /* Page autonome : affichée par le service worker sans réseau, donc sans Tailwind ni polices externes. */
+        * { box-sizing: border-box; }
+        body {
+            margin: 0; min-height: 100dvh; display: grid; place-items: center; padding: 24px;
+            font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+            color: #e8eaf0;
+            background:
+                radial-gradient(ellipse 70% 50% at 15% -10%, rgba(40, 60, 105, 0.55), transparent 60%),
+                linear-gradient(180deg, #0b1222 0%, #070b14 45%, #05070d 100%);
+        }
+        main { width: 100%; max-width: 420px; text-align: center; }
+        img { width: 88px; height: 88px; border-radius: 50%; margin-bottom: 24px; }
+        h1 { font-size: 24px; margin: 0 0 10px; }
+        p { color: #a3abbd; line-height: 1.55; margin: 0 0 28px; }
+        button {
+            font: inherit; font-weight: 600; font-size: 15px; cursor: pointer;
+            padding: 13px 26px; border-radius: 999px; border: 0; background: #f7f5f2; color: #10131c;
+        }
+        button:hover { background: #fff; }
+    </style>
+</head>
+<body>
+    <main>
+        <img src="/pwa-icons/icon-192.png" alt="">
+        <h1>Vous êtes hors connexion</h1>
+        <p>Biblio a besoin d'Internet pour afficher cette page. Vérifiez votre connexion, puis réessayez.</p>
+        <button type="button" onclick="location.reload()">Réessayer</button>
+    </main>
+    <script>
+        // Rechargement automatique dès le retour du réseau
+        window.addEventListener('online', () => location.reload());
+    </script>
+</body>
+</html>
