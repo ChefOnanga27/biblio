@@ -1,6 +1,6 @@
 # Déploiement sur Render (Blueprint) : Dashboard Render → New → Blueprint → choisir ce dépôt.
 # Les valeurs marquées « sync: false » sont demandées à la création : elles ne sont jamais écrites ici.
-# Base de données et fichiers : Supabase (le disque de Render est effacé à chaque déploiement).
+# Base de données : Neon (Postgres) ; fichiers : Supabase Storage (le disque de Render est effacé à chaque déploiement).
 
 services:
   - type: web
@@ -28,19 +28,13 @@ services:
       - key: RUN_MIGRATIONS
         value: "true"
 
-      # Base PostgreSQL Supabase (Connect → Session pooler)
+      # Base PostgreSQL Neon : valeurs de `neon env pull` (ou Console Neon → Connect)
       - key: DB_CONNECTION
-        value: supabase
-      - key: SUPABASE_DB_HOST
-        sync: false
-      - key: SUPABASE_DB_PORT
-        value: "5432"
-      - key: SUPABASE_DB_DATABASE
-        value: postgres
-      - key: SUPABASE_DB_USERNAME
-        sync: false
-      - key: SUPABASE_DB_PASSWORD
-        sync: false
+        value: neon
+      - key: DATABASE_URL
+        sync: false            # connexion pooled (hôte en -pooler), utilisée par l'application
+      - key: DATABASE_URL_UNPOOLED
+        sync: false            # connexion directe, utilisée pour les migrations au démarrage
 
       # Fichiers : Supabase Storage (S3 Connection)
       - key: MEDIA_DISK

@@ -26,9 +26,14 @@ fi
 
 # Migrations automatiques si RUN_MIGRATIONS=true
 if [ "${RUN_MIGRATIONS:-false}" = "true" ]; then
+    # Neon : migrations sur la connexion directe, l'application utilise le pooler
+    MIGRATE_DB=""
+    if [ "$DB_CONNECTION" = "neon" ] && [ -n "$DATABASE_URL_UNPOOLED" ]; then
+        MIGRATE_DB="--database=neon_direct"
+    fi
     echo "Attente de la base de données…"
     for i in $(seq 1 30); do
-        php artisan migrate --force && break
+        php artisan migrate --force $MIGRATE_DB && break
         sleep 2
     done
 fi
