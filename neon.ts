@@ -3,6 +3,10 @@ import { defineConfig } from "@neon/config/v1";
 export default defineConfig({
   // Declare your Neon services here
   auth: false,
+  // Couvertures, PDF et images des articles (disque Laravel « neon », MEDIA_DISK=neon)
+  buckets: {
+    medias: { access: "public_read" },
+  },
   // Branch policy: per-branch tuning
   branch: (branch) => {
     if (branch.isDefault) {

@@ -17,7 +17,7 @@ return [
 
     /*
     | Disque des médias du site (couvertures, PDF, avatars, illustrations du blog) :
-    | « public » (storage/app/public, en local) ou « supabase » (Supabase Storage).
+    | « public » (storage/app/public, en local), « neon » (Neon Object Storage) ou « supabase » (Supabase Storage).
     */
 
     'medias' => env('MEDIA_DISK', 'public'),
@@ -61,6 +61,20 @@ return [
             'endpoint' => env('AWS_ENDPOINT'),
             'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
             'throw' => false,
+        ],
+
+        // Neon Object Storage (bucket déclaré dans neon.ts) : `neon deploy` / `neon env pull` écrivent les
+        // variables AWS_*. Le bucket est public_read : pas de visibility ici, Neon ne gère pas les ACL par objet.
+        'neon' => [
+            'driver' => 's3',
+            'key' => env('AWS_ACCESS_KEY_ID'),
+            'secret' => env('AWS_SECRET_ACCESS_KEY'),
+            'region' => env('AWS_REGION', 'eu-central-1'),
+            'bucket' => env('NEON_BUCKET', 'medias'),
+            'endpoint' => env('AWS_ENDPOINT_URL_S3'),
+            'url' => rtrim((string) env('AWS_ENDPOINT_URL_S3'), '/').'/'.env('NEON_BUCKET', 'medias'),
+            'use_path_style_endpoint' => true,
+            'throw' => true,
         ],
 
         // Supabase Storage via son API compatible S3 (Dashboard → Storage → S3 Connection).

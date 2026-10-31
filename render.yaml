@@ -1,6 +1,6 @@
 # Déploiement sur Render (Blueprint) : Dashboard Render → New → Blueprint → choisir ce dépôt.
 # Les valeurs marquées « sync: false » sont demandées à la création : elles ne sont jamais écrites ici.
-# Base de données : Neon (Postgres) ; fichiers : Supabase Storage (le disque de Render est effacé à chaque déploiement).
+# Base de données et fichiers : Neon, Postgres + Object Storage (le disque de Render est effacé à chaque déploiement).
 
 services:
   - type: web
@@ -36,18 +36,18 @@ services:
       - key: DATABASE_URL_UNPOOLED
         sync: false            # connexion directe, utilisée pour les migrations au démarrage
 
-      # Fichiers : Supabase Storage (S3 Connection)
+      # Fichiers : Neon Object Storage, bucket « medias » (public_read) déclaré dans neon.ts
       - key: MEDIA_DISK
-        value: supabase
-      - key: SUPABASE_URL
+        value: neon
+      - key: NEON_BUCKET
+        value: medias
+      - key: AWS_ENDPOINT_URL_S3
         sync: false
-      - key: SUPABASE_BUCKET
-        value: biblio
-      - key: SUPABASE_S3_REGION
+      - key: AWS_REGION
+        value: eu-central-1
+      - key: AWS_ACCESS_KEY_ID
         sync: false
-      - key: SUPABASE_S3_KEY
-        sync: false
-      - key: SUPABASE_S3_SECRET
+      - key: AWS_SECRET_ACCESS_KEY
         sync: false
 
       # Emails (codes de vérification) : un vrai serveur SMTP est indispensable en production

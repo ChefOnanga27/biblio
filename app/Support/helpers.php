@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Storage;
 
 if (! function_exists('medias')) {
     /**
-     * Disque des médias du site (config filesystems.medias : « public » ou « supabase »).
+     * Disque des médias du site (config filesystems.medias : « public », « neon » ou « supabase »).
      */
     function medias(): Filesystem
     {

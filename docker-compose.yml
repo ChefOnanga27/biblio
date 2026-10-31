@@ -1,10 +1,10 @@
-# Lancement de l'application avec Neon (base PostgreSQL) :
+# Lancement de l'application avec Neon (base PostgreSQL + Object Storage) :
 #   docker compose up -d --build
 #   Site     : http://localhost:8000
 #   Emails   : http://localhost:8025  (Mailpit, boîte mail de test)
 #
-# La base est celle de Neon : `neon env pull` écrit DATABASE_URL et DATABASE_URL_UNPOOLED dans .env,
-# avec DB_CONNECTION=neon. Fichiers sur Supabase Storage : MEDIA_DISK=supabase et SUPABASE_* (voir .env.example).
+# `neon env pull` écrit dans .env DATABASE_URL, DATABASE_URL_UNPOOLED et les variables AWS_* du bucket ;
+# y ajouter DB_CONNECTION=neon et MEDIA_DISK=neon (voir .env.example).
 #
 # Pour tester avec une base MySQL locale à la place : docker compose --profile mysql up -d
 # (et DB_CONNECTION=mysql, DB_HOST=db dans .env).
