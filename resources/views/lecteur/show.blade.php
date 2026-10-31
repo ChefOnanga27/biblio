@@ -195,7 +195,18 @@
         csrf: @json(csrf_token()),
         pageDepart: @json($lecture->page_actuelle ?: 1),
         signetsInitiaux: @json($lecture->signets ?? []),
+        cleProgression: @json('biblio-progression-'.auth()->id().'-'.$livre->id),
+        genereeLe: @json(now()->getTimestampMs()),
     };
+
+    // Dernière page lue sur cet appareil. Elle l'emporte si elle n'a pas encore été envoyée (lecture hors connexion),
+    // ou si elle est plus récente que cette page, ce qui arrive quand la page vient du cache du service worker.
+    const progressionLocale = (() => {
+        try { return JSON.parse(localStorage.getItem(CONFIG.cleProgression)); } catch (_) { return null; }
+    })();
+    if (progressionLocale && progressionLocale.page && (!progressionLocale.envoyee || progressionLocale.date > CONFIG.genereeLe)) {
+        CONFIG.pageDepart = progressionLocale.page;
+    }
 
     pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
@@ -366,11 +377,27 @@
     }
 
     // ── Enregistrement de la progression ──
+    // Gardée aussi sur l'appareil, marquée « envoyée » une fois reçue par le serveur, renvoyée au retour de la connexion
     let minuteur = null;
     function enregistrerProgression() {
         clearTimeout(minuteur);
-        minuteur = setTimeout(() => envoyer(CONFIG.progression, { page: etat.page, total: etat.total }).catch(() => {}), 700);
+        const locale = { page: etat.page, total: etat.total, date: Date.now(), envoyee: false };
+        try { localStorage.setItem(CONFIG.cleProgression, JSON.stringify(locale)); } catch (_) {}
+        minuteur = setTimeout(envoyerProgression, 700);
     }
+
+    function envoyerProgression() {
+        let locale = null;
+        try { locale = JSON.parse(localStorage.getItem(CONFIG.cleProgression)); } catch (_) {}
+        if (!locale || locale.envoyee || !navigator.onLine) return;
+        envoyer(CONFIG.progression, { page: locale.page, total: locale.total }).then(function () {
+            try {
+                const actuelle = JSON.parse(localStorage.getItem(CONFIG.cleProgression));
+                if (actuelle && actuelle.date === locale.date) localStorage.setItem(CONFIG.cleProgression, JSON.stringify({ ...actuelle, envoyee: true }));
+            } catch (_) {}
+        }).catch(() => {});
+    }
+    window.addEventListener('online', envoyerProgression);
 
     async function envoyer(url, donnees) {
         const reponse = await fetch(url, {
@@ -441,7 +468,8 @@
     // ── Démarrage ──
     appliquerMode();
     afficherSignets();
-    pdfjsLib.getDocument(CONFIG.pdf).promise.then(async function (pdf) {
+    // Fichier téléchargé en entier (pas par morceaux) pour que le service worker le garde : le livre reste lisible hors connexion
+    pdfjsLib.getDocument({ url: CONFIG.pdf, disableRange: true }).promise.then(async function (pdf) {
         etat.pdf = pdf;
         etat.total = pdf.numPages;
         $('#chargement').classList.add('hidden');
